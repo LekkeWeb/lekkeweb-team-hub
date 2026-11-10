@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>LekkeWeb Team Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<style>
+/* Same system as the LekkeWeb Studio: black and white glass, green for "go", blue for "open". */
+:root{
+  --bg:#f5f5f7; --wash1:#e9ecf2; --wash2:#eef1ee; --glass:rgba(255,255,255,.72); --glass-hi:rgba(255,255,255,.9); --sunk:rgba(0,0,0,.04);
+  --ink:#0b0b0c; --muted:#6e6e73; --line:rgba(0,0,0,.08); --field:rgba(0,0,0,.14);
+  --solid:#0b0b0c; --on-solid:#ffffff; --green:#16884a; --green-soft:rgba(22,136,74,.12); --blue:#0a66e0; --blue-soft:rgba(10,102,224,.10);
+  --red:#c4141f; --red-soft:rgba(196,20,31,.09); --amber:#c27a00;
+  --shadow:0 1px 1px rgba(0,0,0,.03),0 8px 24px rgba(0,0,0,.06);
+  --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+  --display:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#000000; --wash1:#0d1118; --wash2:#0b120e; --glass:rgba(28,28,30,.66); --glass-hi:rgba(44,44,46,.9); --sunk:rgba(255,255,255,.06);
+  --ink:#f5f5f7; --muted:#98989d; --line:rgba(255,255,255,.10); --field:rgba(255,255,255,.18);
+  --solid:#f5f5f7; --on-solid:#000000; --green:#30d158; --green-soft:rgba(48,209,88,.16); --blue:#409cff; --blue-soft:rgba(64,156,255,.16);
+  --red:#ff453a; --red-soft:rgba(255,69,58,.16); --amber:#ffb340; --shadow:0 1px 1px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.45); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#000000; --wash1:#0d1118; --wash2:#0b120e; --glass:rgba(28,28,30,.66); --glass-hi:rgba(44,44,46,.9); --sunk:rgba(255,255,255,.06);
+  --ink:#f5f5f7; --muted:#98989d; --line:rgba(255,255,255,.10); --field:rgba(255,255,255,.18);
+  --solid:#f5f5f7; --on-solid:#000000; --green:#30d158; --green-soft:rgba(48,209,88,.16); --blue:#409cff; --blue-soft:rgba(64,156,255,.16);
+  --red:#ff453a; --red-soft:rgba(255,69,58,.16); --amber:#ffb340; --shadow:0 1px 1px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.45); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--font);-webkit-font-smoothing:antialiased;min-height:100vh}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(60vw 50vh at 8% -10%,var(--wash1),transparent 70%),radial-gradient(50vw 45vh at 100% 10%,var(--wash2),transparent 70%)}
+[hidden]{display:none!important}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto}
+.glass{background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--line);box-shadow:var(--shadow)}
+header.bar{position:sticky;top:0;z-index:5;border-width:0 0 1px;border-radius:0;box-shadow:none}
+header.bar .wrap{display:flex;align-items:center;gap:12px;padding-block:12px}
+.brand{font:700 18px/1 var(--display);letter-spacing:-.02em;margin:0}
+.brand span{color:var(--muted);font-weight:500}
+.right{margin-left:auto;display:flex;gap:8px;align-items:center}
+main{padding-block:28px 80px}
+h1{font:700 clamp(30px,4.4vw,44px)/1.05 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
+h2{font:700 22px/1.2 var(--display);letter-spacing:-.02em;margin:0}
+h3{font:600 18px/1.25 var(--display);letter-spacing:-.01em;margin:0}
+.lede{color:var(--muted);margin:8px 0 0;max-width:62ch}
+.section{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.panel{border-radius:20px;padding:18px 20px}
+.meta{color:var(--muted);font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;padding:9px 16px;font:600 14.5px var(--font);cursor:pointer;border:1px solid transparent;white-space:nowrap;text-decoration:none!important}
+.btn.solid{background:var(--solid);color:var(--on-solid)}
+.btn.go{background:var(--green);color:#fff}
+.btn.open{background:var(--blue);color:#fff}
+.btn.plain{background:var(--glass-hi);color:var(--ink);border-color:var(--line)}
+.btn.small{padding:6px 12px;font-size:13.5px}
+.btn:hover{filter:brightness(1.06)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+:root[data-theme="dark"] .btn.go,:root[data-theme="dark"] .btn.open{color:#000}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.go,:root:not([data-theme="light"]) .btn.open{color:#000}}
+.seg{display:inline-flex;background:var(--sunk);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 13px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--glass-hi);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+input[type=text],input[type=search],input[type=password],textarea,select{font:15px/1.45 var(--font);color:var(--ink);background:var(--glass-hi);border:1px solid var(--field);border-radius:12px;padding:10px 12px;width:100%}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:3px solid var(--blue-soft);border-color:var(--blue)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--blue-soft);outline-offset:2px}
+label{font-weight:600;font-size:14.5px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.hint{color:var(--muted);font-size:13px;margin:0}
+.notice{border-radius:14px;padding:10px 14px;font-size:14.5px}
+.notice.ok{background:var(--green-soft);color:var(--green)}
+.notice.err{background:var(--red-soft);color:var(--red)}
+.notice.warn{background:var(--blue-soft);color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;white-space:nowrap;background:var(--sunk);color:var(--muted)}
+.pill.blue{background:var(--blue-soft);color:var(--blue)}
+.pill.green{background:var(--green-soft);color:var(--green)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none;background:var(--line)}
+.dot.green{background:#34c759}.dot.blue{background:#0a84ff}.dot.amber{background:#ff9f0a}
+.groups{display:flex;flex-direction:column;gap:26px}
+.client{border-radius:20px;padding:18px 20px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px 24px}
+.client .head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.client .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.copyline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;margin-top:10px;overflow-wrap:anywhere}
+.copyline code{font:inherit;background:var(--sunk);padding:2px 8px;border-radius:8px}
+.sheet h4{margin:0 0 4px;font:600 14px var(--font);color:var(--muted)}
+.sheet ul{margin:0 0 10px;padding-left:18px;font-size:14.5px}
+.sheet li{margin:3px 0}
+details.fb{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px}
+details.fb > summary{cursor:pointer;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+details.fb > summary::-webkit-details-marker{display:none}
+details.fb > summary::before{content:"+";display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--sunk);font-weight:700}
+details.fb[open] > summary::before{content:"\2212"}
+.fb-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:12px}
+.form{display:flex;flex-direction:column;gap:10px}
+.log{display:flex;flex-direction:column;gap:10px}
+.entry{background:var(--sunk);border-radius:14px;padding:10px 12px}
+.entry .who{font-size:12.5px;color:var(--muted);font-weight:600}
+.entry p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px}
+.entry .reply{margin-top:6px;font-size:13.5px;color:var(--green)}
+.entry.fresh{outline:2px solid var(--green)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.recv ul{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.recv li{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:14.5px}
+.recv .last{color:var(--muted);flex-basis:100%;overflow-wrap:anywhere}
+.gate{max-width:420px;margin:12vh auto 0;border-radius:24px;padding:26px}
+.gate form{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar input{max-width:320px}
+@media (max-width:760px){
+  .client{grid-template-columns:1fr}
+  .fb-body{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="bar glass gut">
+  <div class="wrap">
+    <p class="brand">LekkeWeb <span>Team Hub</span></p>
+    <div class="right">
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="gut">
+<div class="wrap">
+  <section id="gate" class="gate glass" hidden>
+    <h2>Team code</h2>
+    <p class="lede">This page is for the LekkeWeb team. Enter the team code Jess sent you once; this device remembers it.</p>
+    <form id="gateForm" novalidate>
+      <div class="field"><label for="code">Team code</label><input type="password" id="code" autocomplete="current-password" placeholder="word-1234"></div>
+      <button class="btn solid" type="submit">Open the hub</button>
+      <div class="notice err" id="gateMsg" hidden></div>
+    </form>
+  </section>
+
+  <section id="app" hidden>
+    <h1>Websites ready for your calls</h1>
+    <p class="lede">Open the presentation on the call. Afterwards, open Feedback on that client, type your notes or attach the Wispr transcript, and press Save. It lands in the Studio straight away and Jess gets an email.</p>
+
+    <div class="section">
+      <div class="panel glass recv">
+        <h3>Feedback received</h3>
+        <p class="meta" id="recvSub" style="margin:4px 0 0">Loading saved feedback...</p>
+        <ul id="recvList" hidden></ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="toolbar">
+        <input type="search" id="q" placeholder="Find a client" aria-label="Find a client">
+        <span class="meta" id="count"></span>
+      </div>
+      <div class="groups" id="groups"><p class="meta">Loading clients...</p></div>
+    </div>
+
+    <div class="section">
+      <div class="panel glass">
+        <h3>Anything else</h3>
+        <p class="meta" style="margin:4px 0 12px">Feedback that isn't about one client: the offer, the presentation, this page.</p>
+        <div id="general"></div>
+      </div>
+    </div>
+    <p class="meta" style="margin-top:28px">Previews are private concepts, not indexed by Google. Every site has a confirm list of things the owner must approve before anything goes live. Please don't forward this page to clients; send them their own client link.</p>
+  </section>
+</div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var API = "https://khvzfkhdnadetjjcdyzk.supabase.co/functions/v1/studio-hub";
+  var TZ = "Africa/Johannesburg";
+  var TEXT_FILE = /\.(txt|md|vtt|srt|json|csv)$/i;
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+  var okUrl = function(u){ return /^https:\/\//i.test(String(u || "")) ? String(u) : null; };
+  var fmt = function(ts, o){ try { return new Date(ts).toLocaleString("en-ZA", Object.assign({ timeZone: TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }, o || {})); } catch (e) { return ""; } };
+  var store = { get: function(k){ try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function(k, v){ try { localStorage.setItem(k, v); } catch (e) {} } };
+
+  /* theme */
+  function applyTheme(t){
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme");
+    var cur = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.querySelectorAll("[data-theme-set]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-theme-set") === cur)); });
+  }
+  applyTheme(store.get("lw-theme") || "light");
+  document.querySelectorAll("[data-theme-set]").forEach(function(b){ b.addEventListener("click", function(){ var t = b.getAttribute("data-theme-set"); store.set("lw-theme", t); applyTheme(t); }); });
+
+  /* team code: from #k=..., then this device */
+  var code = null;
+  var m = (location.hash || "").match(/k=([^&]+)/);
+  if (m) { code = decodeURIComponent(m[1]); store.set("lw-team-code", code); history.replaceState(null, "", location.pathname); }
+  else code = store.get("lw-team-code");
+
+  var clients = [], notes = [], freshIds = {}, loaded = false, openIds = {};
+  var GROUPS = [
+    ["meeting", "Meetings booked", "Open the presentation on the call."],
+    ["follow_up", "Follow up", "Check in on these."],
+    ["with_laine", "Ready to call", "Built and approved. The design does the selling."],
+    ["sent", "Sent to the client", "Link is with the owner."],
+    ["not_sent", "Being built", "Claude is still working on these, or Jess hasn't approved them yet."],
+    ["won", "Won", ""], ["lost", "Lost", ""]
+  ];
+  var groupOf = function(c){ return c.built ? (c.stage === "not_sent" ? "with_laine" : (c.stage || "with_laine")) : (c.stage === "won" || c.stage === "lost" ? c.stage : "not_sent"); };
+
+  function api(method, body){
+    var opt = { method: method, headers: { "Accept": "application/json" }, cache: "no-store" };
+    var url = API;
+    if (method === "GET") url += "?k=" + encodeURIComponent(code || "");
+    else { opt.headers["Content-Type"] = "application/json"; opt.body = JSON.stringify(Object.assign({ k: code }, body)); }
+    return fetch(url, opt).then(function(r){ return r.json().catch(function(){ return { ok: false, error: "http_" + r.status }; }).then(function(d){ d.status = r.status; return d; }); });
+  }
+
+  function showGate(msg){ $("#app").hidden = true; $("#gate").hidden = false; if (msg) { $("#gateMsg").textContent = msg; $("#gateMsg").hidden = false; } $("#code").focus(); }
+  $("#gateForm").addEventListener("submit", function(e){
+    e.preventDefault(); code = $("#code").value.trim(); if (!code) return;
+    load().then(function(ok){ if (ok) store.set("lw-team-code", code); });
+  });
+
+  function load(quiet){
+    return api("GET").then(function(d){
+      if (d.error === "bad_code") { store.set("lw-team-code", ""); showGate(loaded || $("#code").value ? "That code didn't work. Check it with Jess." : null); return false; }
+      if (!d.ok) throw new Error(d.error || "load");
+      var ids = {}; (d.feedback || []).forEach(function(v){ ids[v.id] = 1; });
+      var keep = notes.filter(function(v){ return freshIds[v.id] && !ids[v.id]; });
+      clients = d.clients || []; notes = keep.concat(d.feedback || []);
+      $("#gate").hidden = true; $("#app").hidden = false;
+      if (!loaded) { loaded = true; renderClients(); } else refreshClients();
+      renderNotes();
+      return true;
+    }).catch(function(){
+      if (quiet && loaded) return true;
+      if (!code) { showGate(); return false; }
+      $("#gate").hidden = true; $("#app").hidden = false;
+      $("#recvSub").textContent = "Saved feedback couldn't load just now. Reload the page to try again.";
+      return false;
+    });
+  }
+
+  function drawer(id, name){
+    var key = id || "general";
+    return '<div class="fb-body">' +
+      '<form class="form" data-form="' + key + '" novalidate>' +
+        '<div class="field"><label for="txt-' + key + '">' + (id ? "Notes from the call" : "Your feedback") + '</label><textarea id="txt-' + key + '" placeholder="What did they like, what should change, what did they ask for?"></textarea></div>' +
+        '<div class="field"><label for="about-' + key + '">About</label><select id="about-' + key + '"><option value="call">The call</option><option value="site">The website</option><option value="presentation">The presentation</option><option value="audit">The audit</option><option value="general">Something else</option></select></div>' +
+        '<div class="field"><label for="file-' + key + '">Wispr transcript (optional)</label><input id="file-' + key + '" type="file" accept=".txt,.md,.vtt,.srt,.json,.csv,text/plain,text/markdown"><p class="hint">Text files only. For a screenshot or PDF, email it to hello@lekkeweb.co.za.</p></div>' +
+        '<div class="field"><label for="by-' + key + '">Your name</label><input id="by-' + key + '" type="text" autocomplete="given-name" placeholder="Laine" value="' + esc(store.get("lw-name") || "") + '"></div>' +
+        '<input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+        '<div class="chips"><button class="btn go" type="submit">Save feedback</button><span class="meta" role="status" aria-live="polite" data-status="' + key + '"></span></div>' +
+      '</form>' +
+      '<div class="log" data-log="' + key + '"></div>' +
+    '</div>';
+  }
+
+  function clientHtml(c){
+    var L = c.links || {};
+    var pres = okUrl(L.presentation);
+    var links = [
+      pres ? '<a class="btn open" href="' + esc(pres) + '" target="_blank" rel="noopener">Presentation</a>' : "",
+      okUrl(L.site) ? '<a class="btn plain" href="' + esc(L.site) + '" target="_blank" rel="noopener">Website</a>' : "",
+      okUrl(L.audit) ? '<a class="btn plain" href="' + esc(L.audit) + '" target="_blank" rel="noopener">Audit</a>' : "",
+      okUrl(L.film) ? '<a class="btn plain" href="' + esc(L.film) + '" target="_blank" rel="noopener">Film</a>' : ""
+    ].join("");
+    var pts = (c.points || []).map(function(p){ return "<li>" + esc(p) + "</li>"; }).join("");
+    var asks = (c.asks || []).map(function(p){ return "<li>" + esc(p) + "</li>"; }).join("");
+    return '<article class="client glass" id="c-' + esc(c.id) + '" data-id="' + esc(c.id) + '">' +
+      '<div>' +
+        '<div class="head"><span class="dot ' + esc(c.colour || "") + '"></span><h3>' + esc(c.name) + '</h3>' +
+          (c.track === "stoep" ? '<span class="pill">R7,000</span>' : '<span class="pill">Custom</span>') +
+          (c.built ? "" : '<span class="pill blue">Being built</span>') + '</div>' +
+        '<p class="meta" style="margin:6px 0 0">' + esc([c.industry, c.town].filter(Boolean).join(", ")) + (c.contact ? " · Ask for " + esc(c.contact) : "") + (c.score ? " · Audit " + esc(c.score) + "/100" : "") + '</p>' +
+        (c.phone ? '<div class="copyline"><span>' + esc(c.phone) + '</span><button class="btn plain small" type="button" data-copy="' + esc(c.phone) + '">Copy number</button></div>' : "") +
+        (c.meeting_at ? '<p style="margin:10px 0 0"><span class="pill green">Meeting ' + esc(fmt(c.meeting_at, { weekday: "short" })) + '</span></p>' : (c.stage_note ? '<p class="meta" style="margin:10px 0 0">' + esc(c.stage_note) + '</p>' : "")) +
+        (links ? '<div class="links">' + links + '</div>' : '<p class="meta" style="margin:12px 0 0">' + esc(c.building_note || "Links show here once Jess approves it.") + '</p>') +
+        (pres ? '<div class="copyline"><span class="meta">Client link to send:</span><code>' + esc(pres.replace(/^https:\/\//, "")) + '</code><button class="btn plain small" type="button" data-copy="' + esc(pres) + '">Copy</button></div>' : "") +
+      '</div>' +
+      '<div class="sheet">' + (pts ? "<h4>Point out</h4><ul>" + pts + "</ul>" : "") + (asks ? "<h4>Ask them</h4><ul>" + asks + "</ul>" : "") + (!pts && !asks ? '<p class="meta">The call sheet shows here once the site is built.</p>' : "") + '</div>' +
+      '<details class="fb" data-fb="' + esc(c.id) + '"' + (openIds[c.id] ? " open" : "") + '><summary>Feedback <span class="pill" data-count="' + esc(c.id) + '"></span></summary>' + drawer(c.id, c.name) + '</details>' +
+    '</article>';
+  }
+
+  function renderClients(){
+    var term = $("#q").value.trim().toLowerCase();
+    var list = clients.filter(function(c){ return !term || [c.name, c.town, c.industry, c.contact].join(" ").toLowerCase().indexOf(term) >= 0; });
+    $("#count").textContent = list.length + (list.length === 1 ? " client" : " clients");
+    $("#groups").innerHTML = GROUPS.map(function(g){
+      var items = list.filter(function(c){ return groupOf(c) === g[0]; });
+      if (!items.length) return "";
+      items.sort(function(a, b){ return (a.meeting_at || "9") < (b.meeting_at || "9") ? -1 : 1; });
+      return '<section style="display:flex;flex-direction:column;gap:12px"><div><h2>' + esc(g[1]) + ' <span class="meta" style="font:500 15px var(--font)">' + items.length + '</span></h2>' + (g[2] ? '<p class="meta" style="margin:2px 0 0">' + esc(g[2]) + '</p>' : "") + '</div>' + items.map(clientHtml).join("") + '</section>';
+    }).join("") || '<p class="meta">No clients match.</p>';
+    wire($("#groups"));
+    renderNotes();
+  }
+  /* Re-render without losing what someone is typing */
+  function refreshClients(){
+    var typing = document.activeElement && document.activeElement.closest && document.activeElement.closest("form[data-form]");
+    var drafts = {};
+    document.querySelectorAll("form[data-form] textarea").forEach(function(t){ if (t.value) drafts[t.id] = t.value; });
+    if (typing) return;
+    renderClients();
+    Object.keys(drafts).forEach(function(id){ var t = document.getElementById(id); if (t) t.value = drafts[id]; });
+  }
+  $("#q").addEventListener("input", renderClients);
+
+  function entryHtml(v){
+    return '<div class="entry' + (freshIds[v.id] ? " fresh" : "") + '"><div class="who">' + esc(v.author || "Someone") + " · " + esc(fmt(v.created_at)) + (v.about ? " · " + esc(v.about) : "") + (v.status === "done" ? " · done" : v.status === "sent_to_claude" ? " · with Claude" : "") + '</div><p>' + esc((v.body || "").length > 1200 ? v.body.slice(0, 1200) + "..." : v.body) + '</p>' + (v.reply ? '<div class="reply">Claude: ' + esc(v.reply) + '</div>' : "") + '</div>';
+  }
+  function renderNotes(){
+    var by = {};
+    notes.slice().sort(function(a, b){ return a.created_at < b.created_at ? 1 : -1; }).forEach(function(v){ var k = v.job_id || "general"; (by[k] = by[k] || []).push(v); });
+    document.querySelectorAll("[data-log]").forEach(function(box){
+      var k = box.getAttribute("data-log"), l = by[k] || [];
+      box.innerHTML = l.length ? l.map(entryHtml).join("") : '<p class="meta">Saved feedback for this ' + (k === "general" ? "box" : "client") + ' shows here.</p>';
+    });
+    document.querySelectorAll("[data-count]").forEach(function(c){ var l = by[c.getAttribute("data-count")] || []; c.textContent = l.length ? l.length + (l.length === 1 ? " note" : " notes") : "No notes yet"; c.className = "pill" + (l.length ? " green" : ""); });
+    var names = {}; clients.forEach(function(c){ names[c.id] = c.name; });
+    var keys = Object.keys(by).sort(function(a, b){ return by[a][0].created_at < by[b][0].created_at ? 1 : -1; });
+    if (!notes.length) { $("#recvSub").textContent = "Nothing saved yet. Your notes show here the moment you press Save."; $("#recvList").hidden = true; return; }
+    $("#recvSub").textContent = notes.length + (notes.length === 1 ? " note" : " notes") + " so far, newest first. Tap a name to read it.";
+    $("#recvList").hidden = false;
+    $("#recvList").innerHTML = keys.slice(0, 12).map(function(k){
+      var v = by[k][0];
+      return '<li><a href="#c-' + esc(k) + '" data-open="' + esc(k) + '">' + esc(k === "general" ? "Anything else" : (names[k] || "A client")) + '</a><span class="meta">' + by[k].length + (by[k].length === 1 ? " note" : " notes") + '</span><span class="last">' + esc(v.author || "Someone") + ", " + esc(fmt(v.created_at)) + ": " + esc((v.body || "").replace(/\s+/g, " ").slice(0, 140)) + '</span></li>';
+    }).join("");
+  }
+
+  document.addEventListener("click", function(e){
+    var cp = e.target.closest && e.target.closest("[data-copy]");
+    if (cp) {
+      var t = cp.getAttribute("data-copy"), lbl = cp.textContent;
+      try { navigator.clipboard.writeText(t).then(function(){ cp.textContent = "Copied"; setTimeout(function(){ cp.textContent = lbl; }, 1500); }, function(){ cp.textContent = "Select it"; }); } catch (err) { cp.textContent = "Select it"; }
+      return;
+    }
+    var op = e.target.closest && e.target.closest("[data-open]");
+    if (op) {
+      var k = op.getAttribute("data-open");
+      var d = k === "general" ? $("#general") : document.querySelector('[data-fb="' + k + '"]');
+      if (d) { e.preventDefault(); if (d.tagName === "DETAILS") { d.open = true; openIds[k] = 1; } d.scrollIntoView({ behavior: "smooth", block: "center" }); }
+    }
+  });
+  document.addEventListener("toggle", function(e){ var d = e.target; if (d && d.getAttribute && d.getAttribute("data-fb")) { if (d.open) openIds[d.getAttribute("data-fb")] = 1; else delete openIds[d.getAttribute("data-fb")]; } }, true);
+
+  function wire(root){
+    root.querySelectorAll("form[data-form]").forEach(function(f){
+      if (f.dataset.wired) return; f.dataset.wired = "1";
+      f.addEventListener("submit", function(e){
+        e.preventDefault();
+        var key = f.getAttribute("data-form"), status = f.querySelector("[data-status]");
+        var text = f.querySelector("textarea").value.trim();
+        var file = f.querySelector("input[type=file]").files[0];
+        var by = f.querySelector('input[id^="by-"]').value.trim();
+        var setS = function(msg, kind){ status.textContent = msg; status.style.color = kind === "bad" ? "var(--red)" : kind === "ok" ? "var(--green)" : ""; };
+        if (!text && !file) { setS("Add a note or choose a transcript first.", "bad"); return; }
+        if (file && !(TEXT_FILE.test(file.name) || /^text\//.test(file.type))) { setS("Only text transcripts can be attached here. Paste the text instead, or email the file.", "bad"); return; }
+        if (by) store.set("lw-name", by);
+        var btn = f.querySelector("button[type=submit]"); btn.disabled = true; setS("Saving...");
+        var row = { job_id: key === "general" ? null : key, body: text, author: by, about: f.querySelector("select").value, website: f.querySelector('input[name="website"]').value };
+        (file ? file.text().then(function(t){ row.transcript = t; row.file_name = file.name; }) : Promise.resolve())
+          .then(function(){ return api("POST", row); })
+          .then(function(d){
+            if (d.status >= 500) return new Promise(function(r){ setTimeout(r, 1200); }).then(function(){ return api("POST", row); });
+            return d;
+          })
+          .then(function(d){
+            if (!d.ok) { var er = new Error(d.error); er.code = d.error; throw er; }
+            if (d.note) { freshIds[d.note.id] = 1; notes.unshift(d.note); }
+            f.reset(); f.querySelector('input[id^="by-"]').value = store.get("lw-name") || "";
+            renderNotes();
+            setS("Saved. Jess and Hannes can see it in the Studio now.", "ok");
+          })
+          .catch(function(err){
+            var msgs = { bad_code: "Your team code stopped working. Reload the page and enter the new one.", unknown_client: "This client was removed. Use Anything else at the bottom.", empty: "Add a note first." };
+            setS((err && msgs[err.code]) || "That didn't save. Check your connection and press Save again. Your notes are still in the box.", "bad");
+          })
+          .then(function(){ btn.disabled = false; });
+      });
+    });
+  }
+
+  $("#general").innerHTML = drawer(null, "Anything else");
+  wire($("#general"));
+  if (!code) showGate(); else load();
+  setInterval(function(){ if (!document.hidden && loaded) load(true); }, 60000);
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden && loaded) load(true); });
+})();
+</script>
+</body>
+</html>
