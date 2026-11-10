@@ -46,7 +46,9 @@ a:hover{text-decoration:underline}
 header.bar{position:sticky;top:0;z-index:5;border-width:0 0 1px;border-radius:0;box-shadow:none}
 header.bar .wrap{display:flex;align-items:center;gap:12px;padding-block:12px}
 .brand{font:700 18px/1 var(--display);letter-spacing:-.02em;margin:0}
+.brand{white-space:nowrap}
 .brand span{color:var(--muted);font-weight:500}
+@media (max-width:430px){.brand span{display:none}}
 .right{margin-left:auto;display:flex;gap:8px;align-items:center}
 main{padding-block:28px 80px}
 h1{font:700 clamp(30px,4.4vw,44px)/1.05 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
@@ -108,10 +110,19 @@ details.fb[open] > summary::before{content:"\2212"}
 .entry p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px}
 .entry .reply{margin-top:6px;font-size:13.5px;color:var(--green)}
 .entry.fresh{outline:2px solid var(--green)}
+.jump{position:sticky;top:57px;z-index:4;margin:18px 0 0;display:flex;gap:6px;overflow-x:auto;padding:6px;border-radius:999px;width:max-content;max-width:100%}
+.jump a{font:600 13.5px var(--font);color:var(--muted);padding:6px 12px;border-radius:999px;white-space:nowrap;text-decoration:none!important}
+.jump a:hover{background:var(--glass-hi);color:var(--ink)}
+.recv-item{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;background:var(--sunk);border:1px solid transparent;border-radius:14px;padding:10px 12px;cursor:pointer;color:var(--ink);font:inherit}
+.recv-item:hover{border-color:var(--field)}
+.recv-item b{font-weight:600}
+.recv-item .who{font-size:12.5px;color:var(--muted);font-weight:600}
+.recv-item .txt{font-size:14.5px;overflow-wrap:anywhere}
+.recv-item .go{font-size:13px;color:var(--blue);font-weight:600}
+.entry.flash{animation:flash 1.6s ease}
+@keyframes flash{0%,40%{outline:3px solid var(--blue)}100%{outline:3px solid transparent}}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.recv ul{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
-.recv li{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:14.5px}
-.recv .last{color:var(--muted);flex-basis:100%;overflow-wrap:anywhere}
+.recv ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
 .gate{max-width:420px;margin:12vh auto 0;border-radius:24px;padding:26px}
 .gate form{display:flex;flex-direction:column;gap:12px;margin-top:16px}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -119,6 +130,8 @@ details.fb[open] > summary::before{content:"\2212"}
 @media (max-width:760px){
   .client{grid-template-columns:1fr}
   .fb-body{grid-template-columns:1fr}
+  .fb-body .log{order:-1}
+  .jump{top:53px}
 }
 </style>
 </head>
@@ -127,6 +140,7 @@ details.fb[open] > summary::before{content:"\2212"}
   <div class="wrap">
     <p class="brand">LekkeWeb <span>Team Hub</span></p>
     <div class="right">
+      <a class="btn plain small" href="https://claude.ai/artifact/NW4itVRwgeFWpwXTUPB9fV" target="_blank" rel="noopener" title="For Jess and Hannes">Studio</a>
       <div class="seg" role="group" aria-label="Theme">
         <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
         <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
@@ -150,10 +164,11 @@ details.fb[open] > summary::before{content:"\2212"}
   <section id="app" hidden>
     <h1>Websites ready for your calls</h1>
     <p class="lede">Open the presentation on the call. Afterwards, open Feedback on that client, type your notes or attach the Wispr transcript, and press Save. It lands in the Studio straight away and Jess gets an email.</p>
+    <nav class="jump glass" id="jump" aria-label="Jump to"></nav>
 
-    <div class="section">
+    <div class="section" id="feedback">
       <div class="panel glass recv">
-        <h3>Feedback received</h3>
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;align-items:baseline"><h3>Feedback received</h3><button type="button" class="btn plain small" id="moreFb" hidden>Show all</button></div>
         <p class="meta" id="recvSub" style="margin:4px 0 0">Loading saved feedback...</p>
         <ul id="recvList" hidden></ul>
       </div>
@@ -167,7 +182,7 @@ details.fb[open] > summary::before{content:"\2212"}
       <div class="groups" id="groups"><p class="meta">Loading clients...</p></div>
     </div>
 
-    <div class="section">
+    <div class="section" id="anything-else">
       <div class="panel glass">
         <h3>Anything else</h3>
         <p class="meta" style="margin:4px 0 12px">Feedback that isn't about one client: the offer, the presentation, this page.</p>
@@ -206,7 +221,7 @@ details.fb[open] > summary::before{content:"\2212"}
   if (m) { code = decodeURIComponent(m[1]); store.set("lw-team-code", code); history.replaceState(null, "", location.pathname); }
   else code = store.get("lw-team-code");
 
-  var clients = [], notes = [], freshIds = {}, loaded = false, openIds = {};
+  var clients = [], notes = [], freshIds = {}, loaded = false, openIds = {}, showAll = false;
   var GROUPS = [
     ["meeting", "Meetings booked", "Open the presentation on the call."],
     ["follow_up", "Follow up", "Check in on these."],
@@ -301,9 +316,11 @@ details.fb[open] > summary::before{content:"\2212"}
       var items = list.filter(function(c){ return groupOf(c) === g[0]; });
       if (!items.length) return "";
       items.sort(function(a, b){ return (a.meeting_at || "9") < (b.meeting_at || "9") ? -1 : 1; });
-      return '<section style="display:flex;flex-direction:column;gap:12px"><div><h2>' + esc(g[1]) + ' <span class="meta" style="font:500 15px var(--font)">' + items.length + '</span></h2>' + (g[2] ? '<p class="meta" style="margin:2px 0 0">' + esc(g[2]) + '</p>' : "") + '</div>' + items.map(clientHtml).join("") + '</section>';
+      return '<section id="g-' + g[0] + '" style="display:flex;flex-direction:column;gap:12px;scroll-margin-top:120px"><div><h2>' + esc(g[1]) + ' <span class="meta" style="font:500 15px var(--font)">' + items.length + '</span></h2>' + (g[2] ? '<p class="meta" style="margin:2px 0 0">' + esc(g[2]) + '</p>' : "") + '</div>' + items.map(clientHtml).join("") + '</section>';
     }).join("") || '<p class="meta">No clients match.</p>';
     wire($("#groups"));
+    var present = GROUPS.filter(function(g){ return list.some(function(c){ return groupOf(c) === g[0]; }); });
+    $("#jump").innerHTML = present.map(function(g){ return '<a href="#g-' + g[0] + '">' + esc(g[1]) + '</a>'; }).join("") + '<a href="#feedback">Feedback</a><a href="#anything-else">Anything else</a>';
     renderNotes();
   }
   /* Re-render without losing what someone is typing */
@@ -318,7 +335,7 @@ details.fb[open] > summary::before{content:"\2212"}
   $("#q").addEventListener("input", renderClients);
 
   function entryHtml(v){
-    return '<div class="entry' + (freshIds[v.id] ? " fresh" : "") + '"><div class="who">' + esc(v.author || "Someone") + " · " + esc(fmt(v.created_at)) + (v.about ? " · " + esc(v.about) : "") + (v.status === "done" ? " · done" : v.status === "sent_to_claude" ? " · with Claude" : "") + '</div><p>' + esc((v.body || "").length > 1200 ? v.body.slice(0, 1200) + "..." : v.body) + '</p>' + (v.reply ? '<div class="reply">Claude: ' + esc(v.reply) + '</div>' : "") + '</div>';
+    return '<div class="entry' + (freshIds[v.id] ? " fresh" : "") + '" id="n-' + esc(v.id) + '"><div class="who">' + esc(v.author || "Someone") + " · " + esc(fmt(v.created_at)) + (v.about ? " · " + esc(v.about) : "") + (v.status === "done" ? " · done" : v.status === "sent_to_claude" ? " · with Claude" : "") + '</div><p>' + esc((v.body || "").length > 1200 ? v.body.slice(0, 1200) + "..." : v.body) + '</p>' + (v.reply ? '<div class="reply">Claude: ' + esc(v.reply) + '</div>' : "") + '</div>';
   }
   function renderNotes(){
     var by = {};
@@ -331,11 +348,15 @@ details.fb[open] > summary::before{content:"\2212"}
     var names = {}; clients.forEach(function(c){ names[c.id] = c.name; });
     var keys = Object.keys(by).sort(function(a, b){ return by[a][0].created_at < by[b][0].created_at ? 1 : -1; });
     if (!notes.length) { $("#recvSub").textContent = "Nothing saved yet. Your notes show here the moment you press Save."; $("#recvList").hidden = true; return; }
-    $("#recvSub").textContent = notes.length + (notes.length === 1 ? " note" : " notes") + " so far, newest first. Tap a name to read it.";
+    $("#recvSub").textContent = notes.length + (notes.length === 1 ? " note" : " notes") + " so far, newest first. Tap one to open it on its client.";
+    var sorted = notes.slice().sort(function(a, b){ return a.created_at < b.created_at ? 1 : -1; });
+    var shown = showAll ? sorted : sorted.slice(0, 6);
+    $("#moreFb").hidden = sorted.length <= 6; $("#moreFb").textContent = showAll ? "Show fewer" : "Show all " + sorted.length;
     $("#recvList").hidden = false;
-    $("#recvList").innerHTML = keys.slice(0, 12).map(function(k){
-      var v = by[k][0];
-      return '<li><a href="#c-' + esc(k) + '" data-open="' + esc(k) + '">' + esc(k === "general" ? "Anything else" : (names[k] || "A client")) + '</a><span class="meta">' + by[k].length + (by[k].length === 1 ? " note" : " notes") + '</span><span class="last">' + esc(v.author || "Someone") + ", " + esc(fmt(v.created_at)) + ": " + esc((v.body || "").replace(/\s+/g, " ").slice(0, 140)) + '</span></li>';
+    $("#recvList").innerHTML = shown.map(function(v){
+      var k = v.job_id || "general";
+      var body = (v.body || "").replace(/\s+/g, " ");
+      return '<li><button type="button" class="recv-item" data-open="' + esc(k) + '" data-note="' + esc(v.id) + '"><b>' + esc(k === "general" ? "Anything else" : (names[k] || "A client")) + '</b><span class="who">' + esc(v.author || "Someone") + " · " + esc(fmt(v.created_at)) + (v.about ? " · " + esc(v.about) : "") + '</span><span class="txt">' + esc(body.length > 220 ? body.slice(0, 220) + "..." : body) + '</span><span class="go">Open it</span></button></li>';
     }).join("");
   }
 
@@ -348,9 +369,14 @@ details.fb[open] > summary::before{content:"\2212"}
     }
     var op = e.target.closest && e.target.closest("[data-open]");
     if (op) {
-      var k = op.getAttribute("data-open");
-      var d = k === "general" ? $("#general") : document.querySelector('[data-fb="' + k + '"]');
-      if (d) { e.preventDefault(); if (d.tagName === "DETAILS") { d.open = true; openIds[k] = 1; } d.scrollIntoView({ behavior: "smooth", block: "center" }); }
+      e.preventDefault();
+      var k = op.getAttribute("data-open"), nid = op.getAttribute("data-note");
+      if (k !== "general") { var d = document.querySelector('[data-fb="' + k + '"]'); if (d) { d.open = true; openIds[k] = 1; } }
+      var target = (nid && document.getElementById("n-" + nid)) || (k === "general" ? $("#anything-else") : document.querySelector('[data-fb="' + k + '"]'));
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (target.classList.contains("entry")) { target.classList.remove("flash"); void target.offsetWidth; target.classList.add("flash"); }
+      }
     }
   });
   document.addEventListener("toggle", function(e){ var d = e.target; if (d && d.getAttribute && d.getAttribute("data-fb")) { if (d.open) openIds[d.getAttribute("data-fb")] = 1; else delete openIds[d.getAttribute("data-fb")]; } }, true);
@@ -392,6 +418,7 @@ details.fb[open] > summary::before{content:"\2212"}
     });
   }
 
+  $("#moreFb").addEventListener("click", function(){ showAll = !showAll; renderNotes(); });
   $("#general").innerHTML = drawer(null, "Anything else");
   wire($("#general"));
   if (!code) showGate(); else load();
