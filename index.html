@@ -4,427 +4,1046 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>LekkeWeb Team Hub</title>
+<title>LekkeWeb Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 <style>
-/* Same system as the LekkeWeb Studio: black and white glass, green for "go", blue for "open". */
+/* LekkeWeb Studio, Apple-style glass: black and white, with green for "go" (approve, start) and blue for "open" (links, send).
+   Layout: a frosted sticky bar with four views and a theme switch; a frosted client drawer slides over any view. */
 :root{
-  --bg:#f5f5f7; --wash1:#e9ecf2; --wash2:#eef1ee; --glass:rgba(255,255,255,.72); --glass-hi:rgba(255,255,255,.9); --sunk:rgba(0,0,0,.04);
+  --bg:#f5f5f7; --wash1:#e8ebf1; --wash2:#edf1ee; --card:rgba(255,255,255,.74); --card-hi:rgba(255,255,255,.92); --sunk:rgba(0,0,0,.045);
   --ink:#0b0b0c; --muted:#6e6e73; --line:rgba(0,0,0,.08); --field:rgba(0,0,0,.14);
-  --solid:#0b0b0c; --on-solid:#ffffff; --green:#16884a; --green-soft:rgba(22,136,74,.12); --blue:#0a66e0; --blue-soft:rgba(10,102,224,.10);
-  --red:#c4141f; --red-soft:rgba(196,20,31,.09); --amber:#c27a00;
-  --shadow:0 1px 1px rgba(0,0,0,.03),0 8px 24px rgba(0,0,0,.06);
-  --font:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+  --solid:#0b0b0c; --on-solid:#ffffff; --on-accent:#ffffff;
+  --green:#16884a; --green-soft:rgba(22,136,74,.12); --blue:#0a66e0; --blue-soft:rgba(10,102,224,.10);
+  --red:#c4141f; --red-soft:rgba(196,20,31,.09);
+  --veil:rgba(0,0,0,.25); --shadow:0 1px 1px rgba(0,0,0,.03),0 8px 24px rgba(0,0,0,.06);
   --display:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
-  color-scheme:light;
+  --body:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#000000; --wash1:#0d1118; --wash2:#0b120e; --glass:rgba(28,28,30,.66); --glass-hi:rgba(44,44,46,.9); --sunk:rgba(255,255,255,.06);
+  --bg:#000000; --wash1:#0d1118; --wash2:#0a120d; --card:rgba(28,28,30,.68); --card-hi:rgba(44,44,46,.92); --sunk:rgba(255,255,255,.07);
   --ink:#f5f5f7; --muted:#98989d; --line:rgba(255,255,255,.10); --field:rgba(255,255,255,.18);
-  --solid:#f5f5f7; --on-solid:#000000; --green:#30d158; --green-soft:rgba(48,209,88,.16); --blue:#409cff; --blue-soft:rgba(64,156,255,.16);
-  --red:#ff453a; --red-soft:rgba(255,69,58,.16); --amber:#ffb340; --shadow:0 1px 1px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.45); color-scheme:dark;
+  --solid:#f5f5f7; --on-solid:#000000; --on-accent:#000000;
+  --green:#30d158; --green-soft:rgba(48,209,88,.16); --blue:#409cff; --blue-soft:rgba(64,156,255,.16);
+  --red:#ff453a; --red-soft:rgba(255,69,58,.16);
+  --veil:rgba(0,0,0,.5); --shadow:0 1px 1px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.45); color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --bg:#000000; --wash1:#0d1118; --wash2:#0b120e; --glass:rgba(28,28,30,.66); --glass-hi:rgba(44,44,46,.9); --sunk:rgba(255,255,255,.06);
+  --bg:#000000; --wash1:#0d1118; --wash2:#0a120d; --card:rgba(28,28,30,.68); --card-hi:rgba(44,44,46,.92); --sunk:rgba(255,255,255,.07);
   --ink:#f5f5f7; --muted:#98989d; --line:rgba(255,255,255,.10); --field:rgba(255,255,255,.18);
-  --solid:#f5f5f7; --on-solid:#000000; --green:#30d158; --green-soft:rgba(48,209,88,.16); --blue:#409cff; --blue-soft:rgba(64,156,255,.16);
-  --red:#ff453a; --red-soft:rgba(255,69,58,.16); --amber:#ffb340; --shadow:0 1px 1px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.45); color-scheme:dark;
+  --solid:#f5f5f7; --on-solid:#000000; --on-accent:#000000;
+  --green:#30d158; --green-soft:rgba(48,209,88,.16); --blue:#409cff; --blue-soft:rgba(64,156,255,.16);
+  --red:#ff453a; --red-soft:rgba(255,69,58,.16);
+  --veil:rgba(0,0,0,.5); --shadow:0 1px 1px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.45); color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--font);-webkit-font-smoothing:antialiased;min-height:100vh}
-body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(60vw 50vh at 8% -10%,var(--wash1),transparent 70%),radial-gradient(50vw 45vh at 100% 10%,var(--wash2),transparent 70%)}
 [hidden]{display:none!important}
+body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);-webkit-font-smoothing:antialiased;min-height:100%}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(60vw 50vh at 6% -8%,var(--wash1),transparent 70%),radial-gradient(50vw 45vh at 100% 12%,var(--wash2),transparent 70%)}
 a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap{max-width:1040px;margin:0 auto}
-.glass{background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--line);box-shadow:var(--shadow)}
-header.bar{position:sticky;top:0;z-index:5;border-width:0 0 1px;border-radius:0;box-shadow:none}
-header.bar .wrap{display:flex;align-items:center;gap:12px;padding-block:12px}
-.brand{font:700 18px/1 var(--display);letter-spacing:-.02em;margin:0}
-.brand{white-space:nowrap}
-.brand span{color:var(--muted);font-weight:500}
-@media (max-width:430px){.brand span{display:none}}
-.right{margin-left:auto;display:flex;gap:8px;align-items:center}
-main{padding-block:28px 80px}
-h1{font:700 clamp(30px,4.4vw,44px)/1.05 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
-h2{font:700 22px/1.2 var(--display);letter-spacing:-.02em;margin:0}
-h3{font:600 18px/1.25 var(--display);letter-spacing:-.01em;margin:0}
-.lede{color:var(--muted);margin:8px 0 0;max-width:62ch}
-.section{margin-top:28px;display:flex;flex-direction:column;gap:12px}
-.panel{border-radius:20px;padding:18px 20px}
-.meta{color:var(--muted);font-size:14px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;padding:9px 16px;font:600 14.5px var(--font);cursor:pointer;border:1px solid transparent;white-space:nowrap;text-decoration:none!important}
-.btn.solid{background:var(--solid);color:var(--on-solid)}
-.btn.go{background:var(--green);color:#fff}
-.btn.open{background:var(--blue);color:#fff}
-.btn.plain{background:var(--glass-hi);color:var(--ink);border-color:var(--line)}
-.btn.small{padding:6px 12px;font-size:13.5px}
-.btn:hover{filter:brightness(1.06)}
-.btn[disabled]{opacity:.5;cursor:not-allowed}
-:root[data-theme="dark"] .btn.go,:root[data-theme="dark"] .btn.open{color:#000}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.go,:root:not([data-theme="light"]) .btn.open{color:#000}}
+.wrap{max-width:1080px;margin:0 auto}
+.frost{background:var(--card);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:11px}
+.brand{font:700 19px/1 var(--display);letter-spacing:-.02em;margin:0;white-space:nowrap}
+.brand em{font-style:normal;color:var(--muted);font-weight:500}
+nav.views{display:flex;gap:2px;background:var(--sunk);padding:3px;border-radius:999px;overflow-x:auto;max-width:100%}
+nav.views a{font:600 14px var(--body);color:var(--muted);padding:7px 14px;border-radius:999px;text-decoration:none;white-space:nowrap}
+nav.views a[aria-current="page"]{background:var(--card-hi);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.count{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 6px;border-radius:999px;background:var(--blue);color:var(--on-accent);font-size:11.5px;margin-left:6px}
+.fresh{margin-left:auto;color:var(--muted);font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .seg{display:inline-flex;background:var(--sunk);border-radius:999px;padding:3px;gap:2px}
-.seg button{border:0;background:transparent;color:var(--muted);font:600 13px var(--font);padding:6px 12px;border-radius:999px;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--glass-hi);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
-input[type=text],input[type=search],input[type=password],textarea,select{font:15px/1.45 var(--font);color:var(--ink);background:var(--glass-hi);border:1px solid var(--field);border-radius:12px;padding:10px 12px;width:100%}
-textarea{min-height:90px;resize:vertical}
-input:focus,textarea:focus,select:focus{outline:3px solid var(--blue-soft);border-color:var(--blue)}
-button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--blue-soft);outline-offset:2px}
-label{font-weight:600;font-size:14.5px}
-.field{display:flex;flex-direction:column;gap:6px;min-width:0}
-.hint{color:var(--muted);font-size:13px;margin:0}
-.notice{border-radius:14px;padding:10px 14px;font-size:14.5px}
-.notice.ok{background:var(--green-soft);color:var(--green)}
-.notice.err{background:var(--red-soft);color:var(--red)}
-.notice.warn{background:var(--blue-soft);color:var(--blue)}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 13px var(--body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--card-hi);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+main{padding-block:28px 90px}
+h1{font:700 clamp(30px,4.4vw,44px)/1.05 var(--display);margin:0;letter-spacing:-.03em;text-wrap:balance}
+h2{font:700 22px/1.2 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+h3{font:600 17px/1.3 var(--display);letter-spacing:-.01em;margin:0}
+.lede{color:var(--muted);margin:8px 0 0;max-width:62ch}
+.stack{display:flex;flex-direction:column;gap:12px}
+.section{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+.section-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 14px}
+.empty{color:var(--muted);font-size:14.5px;margin:0}
+.view[hidden]{display:none}
+
+/* summary strip */
+.strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.strip button{display:flex;align-items:baseline;gap:8px;background:var(--card);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid var(--line);border-radius:14px;padding:9px 14px;font:500 14px var(--body);color:var(--muted);cursor:pointer;box-shadow:var(--shadow)}
+.strip button b{font:700 20px/1 var(--display);color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.strip button:hover{border-color:var(--field)}
+
+/* cards and rows */
+.card{background:var(--card);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--line);border-radius:20px;padding:18px 20px;box-shadow:var(--shadow)}
+.job.needs{border-color:color-mix(in srgb,var(--blue) 40%,var(--line));box-shadow:0 0 0 3px var(--blue-soft),var(--shadow)}
+.job-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:flex-start;justify-content:space-between}
+.job-title{display:flex;flex-direction:column;gap:2px;min-width:0}
+.meta{color:var(--muted);font-size:14px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;white-space:nowrap;background:var(--sunk);color:var(--muted)}
-.pill.blue{background:var(--blue-soft);color:var(--blue)}
-.pill.green{background:var(--green-soft);color:var(--green)}
-.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none;background:var(--line)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.you{background:var(--blue-soft);color:var(--blue)}
+.pill.work{background:var(--green-soft);color:var(--green)}
+.pill.done{background:var(--sunk);color:var(--muted)}
+.pill.bad{background:var(--red-soft);color:var(--red)}
+.pill.work::before{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+.tag{display:inline-flex;align-items:center;gap:5px;background:var(--sunk);border-radius:999px;padding:3px 9px;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tag.stoep{background:var(--solid);color:var(--on-solid)}
+.tag.fable{background:var(--green-soft);color:var(--green)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
 .dot.green{background:#34c759}.dot.blue{background:#0a84ff}.dot.amber{background:#ff9f0a}
-.groups{display:flex;flex-direction:column;gap:26px}
-.client{border-radius:20px;padding:18px 20px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px 24px}
-.client .head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
-.client .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.copyline{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;margin-top:10px;overflow-wrap:anywhere}
-.copyline code{font:inherit;background:var(--sunk);padding:2px 8px;border-radius:8px}
-.sheet h4{margin:0 0 4px;font:600 14px var(--font);color:var(--muted)}
-.sheet ul{margin:0 0 10px;padding-left:18px;font-size:14.5px}
-.sheet li{margin:3px 0}
-details.fb{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px}
-details.fb > summary{cursor:pointer;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
-details.fb > summary::-webkit-details-marker{display:none}
-details.fb > summary::before{content:"+";display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--sunk);font-weight:700}
-details.fb[open] > summary::before{content:"\2212"}
-.fb-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:12px}
-.form{display:flex;flex-direction:column;gap:10px}
-.log{display:flex;flex-direction:column;gap:10px}
+.links{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14.5px}
+.links a{font-weight:600}
+.row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto;gap:10px 16px;align-items:center;background:var(--card);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--line);border-radius:16px;padding:13px 16px;box-shadow:var(--shadow)}
+.row .who{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.row .who .dot{margin-top:8px}
+.row .name{background:none;border:0;padding:0;color:var(--ink);font:600 16px var(--body);text-align:left;cursor:pointer;letter-spacing:-.01em}
+.row .name:hover{color:var(--blue)}
+.row .side{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
+.group-label{display:flex;align-items:baseline;gap:10px;margin-top:10px}
+.group-label h3{font:700 19px/1.2 var(--display);letter-spacing:-.02em}
+
+/* forms */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+label,.lbl{font-weight:600;font-size:14.5px}
+.hint{color:var(--muted);font-size:13px;margin:0}
+input[type=text],input[type=url],input[type=tel],input[type=search],input[type=date],input[type=datetime-local],textarea,select{font:15px/1.45 var(--body);color:var(--ink);background:var(--card-hi);border:1px solid var(--field);border-radius:12px;padding:9px 12px;width:100%}
+textarea{min-height:80px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:3px solid var(--blue-soft);outline-offset:0;border-color:var(--blue)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--blue-soft);outline-offset:2px}
+.part{display:flex;flex-direction:column;gap:14px;padding-top:18px;margin-top:18px;border-top:1px solid var(--line)}
+.part:first-child{border-top:0;padding-top:0;margin-top:0}
+#onePart > .part:first-child,#sheetPart{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}
+.choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.choice label{display:flex;gap:10px;align-items:flex-start;font-weight:500;background:var(--card-hi);border:1px solid var(--field);border-radius:16px;padding:12px 14px;cursor:pointer}
+.choice label:has(input:checked){border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.choice b{display:block;font-weight:600}
+.choice small{display:block;color:var(--muted);font-size:13.5px}
+.choice input{margin-top:4px;accent-color:var(--ink)}
+.switch{display:flex;gap:2px;background:var(--sunk);padding:3px;border-radius:999px;width:max-content;max-width:100%;flex-wrap:wrap}
+.switch button{border:0;background:transparent;font:600 14px var(--body);color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--card-hi);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.check{display:flex;gap:9px;align-items:flex-start;font-weight:500}
+.check input{margin-top:5px;accent-color:var(--green)}
+.refs{display:flex;flex-direction:column;gap:8px}
+.ref{display:grid;grid-template-columns:1fr 1.3fr auto;gap:8px}
+.drop{border:1.5px dashed var(--field);border-radius:14px;padding:14px;text-align:center;color:var(--muted);background:var(--card-hi);cursor:pointer}
+.drop.over{border-color:var(--blue);background:var(--blue-soft)}
+.files{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--sunk);border-radius:999px;padding:4px 10px;font-size:13px}
+.chip button{border:0;background:none;cursor:pointer;color:var(--muted);font-size:15px;line-height:1;padding:0}
+details.more{border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:var(--card-hi)}
+details.more > summary{cursor:pointer;font-weight:600}
+details.more[open] > summary{margin-bottom:12px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:999px;padding:10px 18px;font:600 15px var(--body);cursor:pointer;text-decoration:none!important;white-space:nowrap}
+.btn.primary{background:var(--solid);color:var(--on-solid)}
+.btn.go{background:var(--green);color:var(--on-accent)}
+.btn.open{background:var(--blue);color:var(--on-accent)}
+.btn.ghost{background:var(--card-hi);color:var(--ink);border-color:var(--line)}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost:hover{border-color:var(--field);filter:none}
+.btn.small{padding:6px 13px;font-size:13.5px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.linkbtn{background:none;border:0;color:var(--blue);font:inherit;font-weight:600;cursor:pointer;padding:0}
+.linkbtn:hover{text-decoration:underline}
+.linkbtn.quiet{color:var(--muted);font-size:13.5px;font-weight:500}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.notice{border-radius:14px;padding:11px 14px;font-size:14.5px}
+.notice.ok{background:var(--green-soft);color:var(--green)}
+.notice.warn{background:var(--blue-soft);color:var(--blue)}
+.notice.err{background:var(--red-soft);color:var(--red)}
+.notice[hidden]{display:none}
+
+/* looks */
+.dirs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.dir{border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;background:var(--card-hi)}
+.dir .thumb{aspect-ratio:16/10;max-width:100%;background:var(--sunk);display:grid;place-items:center;color:var(--muted);font-size:13px}
+.dir .thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.dir .body{padding:12px 13px 13px;display:flex;flex-direction:column;gap:6px;flex:1}
+.dir .idea{color:var(--muted);font-size:14px;margin:0}
+.dots{display:flex;gap:4px}
+.dots i{width:14px;height:14px;border-radius:50%;border:1px solid var(--line)}
+.dir .act{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+
+/* notes */
+.note{display:flex;gap:12px;align-items:flex-start;border-top:1px solid var(--line);padding-top:12px}
+.note:first-child{border-top:0;padding-top:0}
+.note .txt{flex:1;min-width:0}
+.note p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.note .reply{margin-top:6px;font-size:14px;color:var(--green);background:var(--green-soft);border-radius:12px;padding:7px 10px}
+.note input[type=checkbox]{margin-top:5px;accent-color:var(--blue);width:17px;height:17px}
+.src{font-size:12.5px;font-weight:600;color:var(--muted)}
+ul.sheet{margin:6px 0 0;padding-left:20px}
+ul.sheet li{margin:3px 0}
+.confirm pre{white-space:pre-wrap;font:inherit;margin:8px 0 0;color:var(--muted);overflow-wrap:anywhere}
+.copyline{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14.5px;overflow-wrap:anywhere}
+.copyline code{font:inherit;background:var(--sunk);padding:2px 9px;border-radius:8px}
+
+/* drawer */
+.veil{position:fixed;inset:0;background:var(--veil);z-index:20;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(720px,100%);background:var(--card-hi);-webkit-backdrop-filter:saturate(180%) blur(28px);backdrop-filter:saturate(180%) blur(28px);border-left:1px solid var(--line);z-index:21;overflow-y:auto;box-shadow:-10px 0 40px rgba(0,0,0,.18);
+  padding-top:calc(env(safe-area-inset-top,0px) + 18px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 40px);
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.drawer-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.drawer .block{margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.drawer .block > h3{font:700 18px/1.2 var(--display);letter-spacing:-.02em}
+.drawer .card{background:var(--card)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+.log b{color:var(--ink);font-weight:600}
+
+@media (max-width:780px){
+  .grid2{grid-template-columns:1fr}
+  .ref{grid-template-columns:1fr}
+  .dirs{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .row .side{justify-content:flex-start}
+  .fresh{margin-left:0;width:100%}
+  .switch{width:100%}
+  .switch button{flex:1 1 auto}
+  nav.views a{padding:7px 11px;font-size:13.5px}
+  .bar .wrap{gap:8px 12px}
+}
+@media (prefers-reduced-motion:reduce){.pill.work::before{animation:none}}
+
+/* combined site extras */
+.gate{max-width:420px;margin:12vh auto 0;display:flex;flex-direction:column;gap:12px}
+.who-sel{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.bar .wrap{flex-wrap:wrap}
+.fresh{flex-wrap:nowrap}
+.who-sel select{width:auto;padding:5px 28px 5px 10px;border-radius:999px;font-size:13px}
+.jump{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:4;display:flex;gap:4px;overflow-x:auto;padding:5px;border-radius:999px;width:max-content;max-width:100%;margin-top:16px;background:var(--card);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--line);box-shadow:var(--shadow)}
+.jump a{font:600 13.5px var(--body);color:var(--muted);padding:6px 12px;border-radius:999px;white-space:nowrap;text-decoration:none!important}
+.jump a:hover{background:var(--card-hi);color:var(--ink)}
+.client{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px 24px}
+.client .sheetcol h4{margin:0 0 4px;font:600 13.5px var(--body);color:var(--muted)}
+.client .sheetcol ul{margin:0 0 10px;padding-left:18px;font-size:14.5px}
+.client .sheetcol li{margin:3px 0}
+.client .foot{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.client .fbwrap{grid-column:1/-1}
+.fb-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
 .entry{background:var(--sunk);border-radius:14px;padding:10px 12px}
 .entry .who{font-size:12.5px;color:var(--muted);font-weight:600}
 .entry p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14.5px}
 .entry .reply{margin-top:6px;font-size:13.5px;color:var(--green)}
-.entry.fresh{outline:2px solid var(--green)}
-.jump{position:sticky;top:57px;z-index:4;margin:18px 0 0;display:flex;gap:6px;overflow-x:auto;padding:6px;border-radius:999px;width:max-content;max-width:100%}
-.jump a{font:600 13.5px var(--font);color:var(--muted);padding:6px 12px;border-radius:999px;white-space:nowrap;text-decoration:none!important}
-.jump a:hover{background:var(--glass-hi);color:var(--ink)}
-.recv-item{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;background:var(--sunk);border:1px solid transparent;border-radius:14px;padding:10px 12px;cursor:pointer;color:var(--ink);font:inherit}
-.recv-item:hover{border-color:var(--field)}
-.recv-item b{font-weight:600}
-.recv-item .who{font-size:12.5px;color:var(--muted);font-weight:600}
-.recv-item .txt{font-size:14.5px;overflow-wrap:anywhere}
-.recv-item .go{font-size:13px;color:var(--blue);font-weight:600}
 .entry.flash{animation:flash 1.6s ease}
 @keyframes flash{0%,40%{outline:3px solid var(--blue)}100%{outline:3px solid transparent}}
+.recv-item{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;background:var(--sunk);border:1px solid transparent;border-radius:14px;padding:10px 12px;cursor:pointer;color:var(--ink);font:inherit}
+.recv-item:hover{border-color:var(--field)}
+.recv-item .go{font-size:13px;color:var(--blue);font-weight:600}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.recv ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
-.gate{max-width:420px;margin:12vh auto 0;border-radius:24px;padding:26px}
-.gate form{display:flex;flex-direction:column;gap:12px;margin-top:16px}
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.toolbar input{max-width:320px}
-@media (max-width:760px){
-  .client{grid-template-columns:1fr}
-  .fb-body{grid-template-columns:1fr}
-  .fb-body .log{order:-1}
-  .jump{top:53px}
-}
+@media (max-width:780px){.bar{position:static}.jump{top:calc(env(safe-area-inset-top,0px) + 8px)}.client{grid-template-columns:1fr}.fb-body{grid-template-columns:1fr}.fb-body .logcol{order:-1}.who-sel span{display:none}}
 </style>
 </head>
 <body>
-<header class="bar glass gut">
+<header class="bar gut">
   <div class="wrap">
-    <p class="brand">LekkeWeb <span>Team Hub</span></p>
-    <div class="right">
-      <a class="btn plain small" href="https://claude.ai/artifact/NW4itVRwgeFWpwXTUPB9fV" target="_blank" rel="noopener" title="For Jess and Hannes">Studio</a>
-      <div class="seg" role="group" aria-label="Theme">
-        <button type="button" data-theme-set="light" aria-pressed="false">Light</button>
-        <button type="button" data-theme-set="dark" aria-pressed="false">Dark</button>
-      </div>
+    <p class="brand">LekkeWeb <em>Studio</em></p>
+    <nav class="views" aria-label="Studio views" id="nav" hidden>
+      <a href="#clients" data-view="clients">Clients</a>
+      <a href="#today" data-view="today">Needs you<span class="count" id="c-needs" hidden>0</span></a>
+      <a href="#new" data-view="new">New website</a>
+      <a href="#reviews" data-view="reviews">Reviews<span class="count" id="c-notes" hidden>0</span></a>
+    </nav>
+    <div class="fresh">
+      <label class="who-sel" id="whoWrap" hidden><span>You are</span><select id="who" aria-label="You are"><option>Jess</option><option>Hannes</option><option>Laine</option><option>Team</option></select></label>
+      <button class="btn ghost small" id="refresh" type="button" hidden>Refresh</button>
+      <div class="seg" role="group" aria-label="Theme"><button type="button" data-theme-set="light" aria-pressed="false">Light</button><button type="button" data-theme-set="dark" aria-pressed="false">Dark</button></div>
     </div>
   </div>
 </header>
 
 <main class="gut">
 <div class="wrap">
-  <section id="gate" class="gate glass" hidden>
+  <section class="gate card" id="gate" hidden>
     <h2>Team code</h2>
-    <p class="lede">This page is for the LekkeWeb team. Enter the team code Jess sent you once; this device remembers it.</p>
-    <form id="gateForm" novalidate>
-      <div class="field"><label for="code">Team code</label><input type="password" id="code" autocomplete="current-password" placeholder="word-1234"></div>
-      <button class="btn solid" type="submit">Open the hub</button>
+    <p class="lede" style="margin:0">This is the LekkeWeb team's Studio. Enter the team code once; this device remembers it.</p>
+    <form id="gateForm" class="stack" novalidate>
+      <div class="field"><label for="code">Team code</label><input type="text" id="code" autocomplete="off" autocapitalize="off" placeholder="lekke-0000"></div>
+      <button class="btn primary" type="submit">Open the Studio</button>
       <div class="notice err" id="gateMsg" hidden></div>
     </form>
   </section>
 
-  <section id="app" hidden>
-    <h1>Websites ready for your calls</h1>
-    <p class="lede">Open the presentation on the call. Afterwards, open Feedback on that client, type your notes or attach the Wispr transcript, and press Save. It lands in the Studio straight away and Jess gets an email.</p>
-    <nav class="jump glass" id="jump" aria-label="Jump to"></nav>
+  <div class="notice err" id="pageMsg" hidden></div>
 
+  <!-- CLIENTS (front page) -->
+  <section class="view" id="v-clients" aria-labelledby="h-clients" hidden>
+    <h1 id="h-clients">Websites ready for your calls</h1>
+    <p class="lede">Open the presentation on the call. Afterwards, open Feedback on that client, type your notes or attach the Wispr transcript, and press Save. Jess gets an email and Claude can act on it.</p>
+    <nav class="jump" id="jump" aria-label="Jump to"></nav>
     <div class="section" id="feedback">
-      <div class="panel glass recv">
-        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;align-items:baseline"><h3>Feedback received</h3><button type="button" class="btn plain small" id="moreFb" hidden>Show all</button></div>
-        <p class="meta" id="recvSub" style="margin:4px 0 0">Loading saved feedback...</p>
-        <ul id="recvList" hidden></ul>
+      <div class="card stack">
+        <div class="section-head"><h2>Latest feedback</h2><button type="button" class="btn ghost small" id="moreFb" hidden>Show all</button></div>
+        <p class="meta" id="recvSub" style="margin:0">Loading...</p>
+        <ul id="recvList" class="stack" style="list-style:none;margin:0;padding:0" hidden></ul>
       </div>
     </div>
-
     <div class="section">
-      <div class="toolbar">
-        <input type="search" id="q" placeholder="Find a client" aria-label="Find a client">
+      <div class="actions">
+        <input type="search" id="q" placeholder="Find a client" aria-label="Find a client" style="max-width:320px">
+        <select id="fl-track" aria-label="Offer" style="width:auto"><option value="all">Both offers</option><option value="stoep">R7,000 Stoep page</option><option value="studio">Custom Studio</option></select>
+        <select id="fl-batch" aria-label="Batch" style="width:auto"><option value="all">All batches</option></select>
         <span class="meta" id="count"></span>
       </div>
-      <div class="groups" id="groups"><p class="meta">Loading clients...</p></div>
+      <div class="stack" id="groups" style="gap:26px"><p class="empty">Loading clients...</p></div>
     </div>
-
     <div class="section" id="anything-else">
-      <div class="panel glass">
-        <h3>Anything else</h3>
-        <p class="meta" style="margin:4px 0 12px">Feedback that isn't about one client: the offer, the presentation, this page.</p>
+      <div class="card stack">
+        <h2>Anything else</h2>
+        <p class="meta" style="margin:0">Feedback that isn't about one client: the offer, the presentation, this page.</p>
         <div id="general"></div>
       </div>
     </div>
-    <p class="meta" style="margin-top:28px">Previews are private concepts, not indexed by Google. Every site has a confirm list of things the owner must approve before anything goes live. Please don't forward this page to clients; send them their own client link.</p>
+  </section>
+
+  <!-- NEEDS YOU -->
+  <section class="view" id="v-today" aria-labelledby="h-today" hidden>
+    <h1 id="h-today">Needs you</h1>
+    <p class="lede">Approvals waiting on Jess, meetings coming up and what Claude is building. Claude checks for new work every hour from 07:23 to 20:23 and emails at each step.</p>
+    <div class="strip" id="strip"></div>
+    <div class="section"><div class="section-head"><h2>Waiting for approval</h2><span class="meta" id="needsMeta"></span></div><div class="stack" id="t-needs"><p class="empty">Loading...</p></div></div>
+    <div class="section"><div class="section-head"><h2>Coming up</h2><span class="meta">Meetings and follow-ups in the next two weeks</span></div><div class="stack" id="t-soon"><p class="empty">Loading...</p></div></div>
+    <div class="section"><div class="section-head"><h2>Claude is working on</h2><span class="meta">Built on Claude Fable unless a job says Standard</span></div><div class="stack" id="t-work"><p class="empty">Loading...</p></div></div>
+  </section>
+
+  <!-- NEW -->
+  <section class="view" id="v-new" aria-labelledby="h-new" hidden>
+    <h1 id="h-new">Start a new website</h1>
+    <p class="lede">Pick the offer first. A name and a town is enough for Claude to start; everything else makes the result better. Claude picks it up at its next hourly check.</p>
+    <form class="card" id="intake" novalidate style="margin-top:18px">
+      <div class="part">
+        <span class="lbl" id="track-lbl">Which offer?</span>
+        <div class="choice" role="radiogroup" aria-labelledby="track-lbl">
+          <label><input type="radio" name="track" value="stoep" checked><span><b>R7,000 Stoep page</b><small>Audit, one high-craft site, the breakdown page and the audit page land together. Jess approves once, then Claude makes the client link and the call sheet.</small></span></label>
+          <label><input type="radio" name="track" value="studio"><span><b>Custom Studio</b><small>Three looks to pick from, the full site, then a proposal in their branding. For bigger clients and custom quotes.</small></span></label>
+        </div>
+        <div class="switch" role="group" aria-label="How many businesses">
+          <button type="button" id="m-one" aria-pressed="true">One business</button>
+          <button type="button" id="m-sheet" aria-pressed="false">A whole outreach sheet</button>
+        </div>
+      </div>
+      <div class="part" id="sheetPart" hidden>
+        <div class="grid2">
+          <div class="field full"><label for="s-link">Laine's sheet</label><input type="url" id="s-link" autocomplete="off" placeholder="https://docs.google.com/spreadsheets/d/..."><p class="hint">Claude reads the row colours: green is a booked meeting, blue is high interest, amber is a call back. Clients already in the Studio are skipped, never replaced.</p></div>
+          <div class="field"><label for="s-batch">Batch name</label><input type="text" id="s-batch" autocomplete="off" placeholder="Milnerton, 12 Nov"></div>
+          <div class="field"><span class="lbl">Rows to build</span>
+            <label class="check"><input type="checkbox" id="s-green" checked> Green, meetings booked</label>
+            <label class="check"><input type="checkbox" id="s-blue" checked> Blue, high interest</label>
+            <label class="check"><input type="checkbox" id="s-amber"> Amber, call backs</label></div>
+          <div class="field full"><label class="check"><input type="checkbox" id="s-film" checked> Make a 30-second film for every booked meeting</label></div>
+          <div class="field full"><label for="s-notes">Notes for the batch</label><textarea id="s-notes" placeholder="Anything that applies to all of them"></textarea></div>
+        </div>
+      </div>
+      <div id="onePart">
+        <div class="part">
+          <h2>The business</h2>
+          <div class="grid2">
+            <div class="field"><label for="f-name">Business name</label><input type="text" id="f-name" autocomplete="off" placeholder="Pest Worx SA"></div>
+            <div class="field"><label for="f-industry">Industry</label><input type="text" id="f-industry" list="industries" autocomplete="off" placeholder="Pest control"><datalist id="industries"></datalist></div>
+            <div class="field"><label for="f-town">Town or area</label><input type="text" id="f-town" autocomplete="off" placeholder="Milnerton"></div>
+            <div class="field"><label for="f-site">Current website</label><input type="url" id="f-site" autocomplete="off" placeholder="https://"><p class="hint">Leave empty if they don't have one.</p></div>
+            <div class="field full"><label for="f-socials">Socials and listings</label><textarea id="f-socials" placeholder="One link per line: Google listing, Facebook, Instagram"></textarea></div>
+            <div class="field full"><label for="f-audit">Free audit link</label><input type="url" id="f-audit" autocomplete="off" placeholder="https://lekkeweb.co.za/audit/r/..."><p class="hint">Optional. Without one, Claude runs the Online Stoep Audit itself.</p></div>
+          </div>
+        </div>
+        <div class="part">
+          <h2>The lead</h2>
+          <div class="grid2">
+            <div class="field"><label for="f-contact">Ask for</label><input type="text" id="f-contact" autocomplete="off" placeholder="Marcel"></div>
+            <div class="field"><label for="f-phone">Phone</label><input type="tel" id="f-phone" autocomplete="off" placeholder="073 044 7650"></div>
+            <div class="field"><label for="f-colour">Lead</label><select id="f-colour"><option value="">Not called yet</option><option value="green">Green, meeting booked</option><option value="blue">Blue, high interest</option><option value="amber">Amber, call back</option></select></div>
+            <div class="field"><label for="f-meet">Meeting</label><input type="datetime-local" id="f-meet"><p class="hint">South African time. Booked meetings jump the queue.</p></div>
+            <div class="field full"><label class="check"><input type="checkbox" id="f-film"> Make a 30-second film once the site is approved</label></div>
+          </div>
+        </div>
+        <details class="more part">
+          <summary>Vibe, voice, references and files</summary>
+          <div class="grid2">
+            <div class="field"><label for="f-vibe">Three vibe words</label><input type="text" id="f-vibe" autocomplete="off" placeholder="Fun, bold, refined"></div>
+            <div class="field"><label for="f-not">One word it must never feel like</label><input type="text" id="f-not" autocomplete="off" placeholder="Corporate"></div>
+            <div class="field full"><label for="f-voice">Voice notes</label><textarea id="f-voice" placeholder="Paste a few of the owner's own words, or describe it: cheeky but warm, never salesy."></textarea></div>
+            <div class="field full"><span class="lbl">Sites you love and why</span><div class="refs" id="refs"></div><div><button type="button" class="btn ghost small" id="addRef">Add another reference</button></div></div>
+            <div class="field full">
+              <span class="lbl" id="files-lbl">Files</span>
+              <p class="hint">Logo, brand guide, photos, up to 45 MB each. Claude uses them as the client's own material.</p>
+              <div class="drop" id="drop" tabindex="0" role="button" aria-labelledby="files-lbl">Drop files here or click to choose</div>
+              <input type="file" id="f-files" multiple hidden>
+              <div class="files" id="fileList"></div>
+            </div>
+          </div>
+        </details>
+        <div class="part" id="studioOnly" hidden>
+          <h2>The proposal</h2>
+          <div class="field">
+            <span class="lbl" id="offer-lbl">Price on the proposal</span>
+            <div class="choice" role="radiogroup" aria-labelledby="offer-lbl">
+              <label><input type="radio" name="offer" value="chat" checked><span><b>No price, let's chat</b><small>Ends on scoping questions and a call.</small></span></label>
+              <label><input type="radio" name="offer" value="starter"><span><b>Starter offer</b><small>Numbers checked against the context pack.</small></span></label>
+              <label><input type="radio" name="offer" value="custom"><span><b>Custom</b><small>Type exactly what it should say.</small></span></label>
+            </div>
+            <input type="text" id="f-offer-custom" autocomplete="off" placeholder="R18,500 once-off, or 3 payments of R6,500" hidden>
+          </div>
+          <div class="field"><label for="f-note">For the founder note</label><textarea id="f-note" placeholder="Why you're reaching out and what you love about them. Claude only uses true stories from here."></textarea></div>
+        </div>
+        <div class="part"><div class="field"><label for="f-extra">Anything else</label><textarea id="f-extra" placeholder="Must-keep wording, things to avoid, a deadline, what Laine heard on the call"></textarea></div></div>
+      </div>
+      <div class="part">
+        <span class="lbl" id="model-lbl">Who builds it</span>
+        <div class="choice" role="radiogroup" aria-labelledby="model-lbl">
+          <label><input type="radio" name="model" value="fable" checked><span><b>Claude Fable</b><small>Design and build run on Fable for the best client result.</small></span></label>
+          <label><input type="radio" name="model" value="standard"><span><b>Standard</b><small>Uses less of the plan. Fine for quick internal tests.</small></span></label>
+        </div>
+      </div>
+      <div class="actions" style="margin-top:20px">
+        <button type="submit" class="btn go" id="submitBtn">Start this website</button>
+        <span class="hint" id="submitHint"></span>
+      </div>
+      <div class="notice" id="formMsg" hidden style="margin-top:14px"></div>
+    </form>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="view" id="v-reviews" aria-labelledby="h-reviews" hidden>
+    <h1 id="h-reviews">Reviews</h1>
+    <p class="lede">Every review from the team, Laine's calls and Jess's own notes. New ones are emailed to hello@lekkeweb.co.za within the hour. Open a client to send reviews to Claude as changes.</p>
+    <div class="card stack" style="margin-top:18px">
+      <div class="section-head"><h2>Share with the team</h2></div>
+      <div id="shareInfo" class="stack"></div>
+    </div>
+    <div class="actions" style="margin-top:18px">
+      <div class="switch" role="group" aria-label="Which reviews">
+        <button type="button" id="n-open" aria-pressed="true">Open</button>
+        <button type="button" id="n-all" aria-pressed="false">All</button>
+      </div>
+      <button class="btn ghost small" type="button" id="pullHub">Pull notes from Hannes's old hub</button>
+      <span class="hint" id="hubSync"></span>
+    </div>
+    <div class="notice" id="notesMsg" hidden style="margin-top:12px"></div>
+    <div class="card" style="margin-top:16px"><div class="stack" id="noteList"><p class="empty">Loading...</p></div></div>
   </section>
 </div>
 </main>
 
-<script>
-(function(){
-  "use strict";
-  var API = "https://khvzfkhdnadetjjcdyzk.supabase.co/functions/v1/studio-hub";
-  var TZ = "Africa/Johannesburg";
-  var TEXT_FILE = /\.(txt|md|vtt|srt|json|csv)$/i;
-  var $ = function(s, r){ return (r || document).querySelector(s); };
-  var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
-  var okUrl = function(u){ return /^https:\/\//i.test(String(u || "")) ? String(u) : null; };
-  var fmt = function(ts, o){ try { return new Date(ts).toLocaleString("en-ZA", Object.assign({ timeZone: TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }, o || {})); } catch (e) { return ""; } };
-  var store = { get: function(k){ try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function(k, v){ try { localStorage.setItem(k, v); } catch (e) {} } };
+<div class="veil" id="veil" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-title" hidden tabindex="-1"></aside>
 
-  /* theme */
-  function applyTheme(t){
+<script>
+(() => {
+  "use strict";
+  const API = "https://khvzfkhdnadetjjcdyzk.supabase.co/functions/v1/studio-hub";
+  const SITE = "https://lekkeweb-team-hub.vercel.app/";
+  const TZ = "Africa/Johannesburg";
+  const TEXT_FILE = /\.(txt|md|vtt|srt|json|csv)$/i;
+  const SEED_INDUSTRIES = ["Bakery and cookies","Plumber","Electrician","Beauty salon","Gym and fitness","Restaurant and cafe","Catering","Guesthouse","Builder","Car detailing","Pest control","Handyman","Landscaping","Garage doors","Cleaning","Dog grooming","Party hire","Hair salon","Shuttle and transport","Physio and health","Lawyer","Accountant","Photographer"];
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === "class") n.className = v;
+      else if (k === "text") n.textContent = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) n.append(kid.nodeType ? kid : document.createTextNode(kid));
+    return n;
+  };
+  const store = { get: (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} } };
+
+  /* ---------- theme ---------- */
+  function applyTheme(t) {
     if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme");
-    var cur = t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    document.querySelectorAll("[data-theme-set]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-theme-set") === cur)); });
+    $$("[data-theme-set]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.themeSet === (t || "light"))));
   }
   applyTheme(store.get("lw-theme") || "light");
-  document.querySelectorAll("[data-theme-set]").forEach(function(b){ b.addEventListener("click", function(){ var t = b.getAttribute("data-theme-set"); store.set("lw-theme", t); applyTheme(t); }); });
+  $$("[data-theme-set]").forEach(b => b.addEventListener("click", () => { store.set("lw-theme", b.dataset.themeSet); applyTheme(b.dataset.themeSet); }));
 
-  /* team code: from #k=..., then this device */
-  var code = null;
-  var m = (location.hash || "").match(/k=([^&]+)/);
-  if (m) { code = decodeURIComponent(m[1]); store.set("lw-team-code", code); history.replaceState(null, "", location.pathname); }
+  /* ---------- who and team code ---------- */
+  const whoSel = $("#who");
+  if (store.get("lw-name")) { const n = store.get("lw-name"); if (![...whoSel.options].some(o => o.value === n)) whoSel.append(el("option", { value: n }, n)); whoSel.value = n; }
+  whoSel.addEventListener("change", () => store.set("lw-name", whoSel.value));
+  const who = () => whoSel.value || "Team";
+  let code = null;
+  const hm = (location.hash || "").match(/k=([^&]+)/);
+  if (hm) { code = decodeURIComponent(hm[1]); store.set("lw-team-code", code); history.replaceState(null, "", location.pathname + "#clients"); }
   else code = store.get("lw-team-code");
 
-  var clients = [], notes = [], freshIds = {}, loaded = false, openIds = {}, showAll = false;
-  var GROUPS = [
-    ["meeting", "Meetings booked", "Open the presentation on the call."],
-    ["follow_up", "Follow up", "Check in on these."],
-    ["with_laine", "Ready to call", "Built and approved. The design does the selling."],
-    ["sent", "Sent to the client", "Link is with the owner."],
-    ["not_sent", "Being built", "Claude is still working on these, or Jess hasn't approved them yet."],
-    ["won", "Won", ""], ["lost", "Lost", ""]
-  ];
-  var groupOf = function(c){ return c.built ? (c.stage === "not_sent" ? "with_laine" : (c.stage || "with_laine")) : (c.stage === "won" || c.stage === "lost" ? c.stage : "not_sent"); };
+  /* ---------- state ---------- */
+  let jobs = [], notes = [], sync = null, hub = null, loadedAt = null, openId = null, noteFilter = "open", showAllFb = false, loaded = false;
+  const freshIds = {}, openFb = {};
 
-  function api(method, body){
-    var opt = { method: method, headers: { "Accept": "application/json" }, cache: "no-store" };
-    var url = API;
-    if (method === "GET") url += "?k=" + encodeURIComponent(code || "");
-    else { opt.headers["Content-Type"] = "application/json"; opt.body = JSON.stringify(Object.assign({ k: code }, body)); }
-    return fetch(url, opt).then(function(r){ return r.json().catch(function(){ return { ok: false, error: "http_" + r.status }; }).then(function(d){ d.status = r.status; return d; }); });
+  /* ---------- labels ---------- */
+  const STATUS = {
+    batch_submitted: ["Sheet in the queue", "work"], batching: ["Reading the sheet", "work"],
+    submitted: ["In the queue", "work"], researching: ["Researching and auditing", "work"],
+    directions_ready: ["Pick a look", "you"], directions_changes: ["Making new looks", "work"],
+    direction_chosen: ["Build queued", "work"], building: ["Building", "work"],
+    site_ready: ["Ready to check", "you"], site_changes: ["Changes queued", "work"],
+    site_approved: ["Approved, wrapping up", "work"], proposing: ["Making the proposal", "work"],
+    proposal_ready: ["Proposal ready to check", "you"], proposal_changes: ["Proposal changes queued", "work"],
+    proposal_approved: ["Filing it away", "work"], wrapping: ["Making the client link", "work"],
+    done: ["Built", "done"], failed: ["Needs a look", "bad"], cancelled: ["Removed", "done"]
+  };
+  const statusOf = (j) => {
+    if (j.track === "stoep" && j.status === "site_ready") return ["Pack ready to check", "you"];
+    return STATUS[j.status] || [j.status, "work"];
+  };
+  const STAGES = [["meeting", "Meetings booked"], ["follow_up", "Follow up"], ["with_laine", "Ready to call"], ["sent", "Sent to the client"], ["not_sent", "Being built"], ["won", "Won"], ["lost", "Lost"]];
+  const STAGE_SHORT = { meeting: "Meeting booked", follow_up: "Follow up", with_laine: "Ready to call", sent: "Sent to client", not_sent: "Not sent yet", won: "Won", lost: "Lost" };
+  const WORKING = new Set(["batch_submitted","batching","submitted","researching","directions_changes","direction_chosen","building","site_changes","site_approved","proposing","proposal_changes","proposal_approved","wrapping"]);
+  const LOCKED = new Set(["batching","researching","building","proposing","wrapping"]);
+  const isBatch = (j) => j.status === "batch_submitted" || j.status === "batching" || (j.business_name || "").startsWith("Sheet: ");
+  const built = (j) => j.status === "done" || !!j.client_link;
+  const groupOf = (j) => { const s = j.client_stage || "not_sent"; if (s === "won" || s === "lost") return s; if (!built(j)) return "not_sent"; return s === "not_sent" ? "with_laine" : s; };
+  const presentationOf = (j) => safeUrl(j.client_link) || safeUrl(j.track === "stoep" ? j.breakdown_url : j.proposal_url);
+
+  /* ---------- formatting ---------- */
+  const fmt = (iso, opts) => { if (!iso) return ""; try { return new Date(iso).toLocaleString("en-ZA", Object.assign({ timeZone: TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }, opts || {})); } catch (_) { return ""; } };
+  const fmtMeet = (iso) => fmt(iso, { weekday: "short" });
+  const fmtDay = (d) => fmt(d + "T09:00:00+02:00", { weekday: "short", hour: undefined, minute: undefined });
+  const ago = (iso) => { if (!iso) return ""; const m = Math.round((Date.now() - new Date(iso).getTime()) / 60000); if (m < 1) return "just now"; if (m < 60) return m + " min ago"; const h = Math.round(m / 60); if (h < 24) return h + " h ago"; return fmt(iso, { hour: undefined, minute: undefined }); };
+  const toLocalInput = (iso) => { if (!iso) return ""; const p = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date(iso)); const g = (t) => (p.find(x => x.type === t) || {}).value; return g("year") + "-" + g("month") + "-" + g("day") + "T" + g("hour") + ":" + g("minute"); };
+  const fromLocalInput = (v) => v ? v + ":00+02:00" : null;
+  function safeUrl(u) { return /^https:\/\//i.test(String(u || "")) ? String(u) : null; }
+  const ext = (href, text, cls) => safeUrl(href) ? el("a", { href: safeUrl(href), target: "_blank", rel: "noopener", class: cls || null }, text) : null;
+  const notice = (node, kind, msg) => { node.className = "notice " + kind; node.textContent = msg; node.hidden = false; };
+  function copyBtn(text, label) {
+    const b = el("button", { type: "button", class: "btn ghost small" }, label || "Copy");
+    b.addEventListener("click", () => { const done = () => { b.textContent = "Copied"; setTimeout(() => b.textContent = label || "Copy", 1500); }; try { navigator.clipboard.writeText(text).then(done, () => { b.textContent = "Select and copy it"; }); } catch (_) { b.textContent = "Select and copy it"; } });
+    return b;
+  }
+  const QUEUED = "Saved. Claude picks it up at its next hourly check (07:23 to 20:23) and emails Jess when it's ready.";
+
+  /* ---------- API ---------- */
+  const ERR = {
+    bad_code: "The team code has changed. Reload the page and enter the new one.", changed: "Someone else changed this client a moment ago. It has been refreshed; try again.",
+    busy: "Claude is busy on this one right now. Try again once the current step lands.", unknown_client: "That client was removed.", empty: "Add a note first.",
+    no_proposal: "There is no proposal yet. Approve the website first, then send proposal notes.", transition: "This client can't take that step right now.",
+    sheet_link: "Paste the Google Sheets link to Laine's sheet.", colours: "Tick at least one row colour to build.", name: "Add the business name.", date: "That date doesn't look right."
+  };
+  async function api(op, body) {
+    let r;
+    try { r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ k: code, op, who: who() }, body || {})) }); }
+    catch (_) { throw { code: "network", message: "Couldn't reach the Studio. Check your connection and try again." }; }
+    const d = await r.json().catch(() => ({ ok: false, error: "http_" + r.status }));
+    if (!d.ok) {
+      if (d.error === "bad_code") { store.set("lw-team-code", ""); showGate("The team code has changed. Enter the new one."); }
+      throw { code: d.error, message: ERR[d.error] || "That didn't work. Try again in a moment." };
+    }
+    return d;
+  }
+  const errText = (e) => (e && e.message) || "That didn't work. Try again in a moment.";
+
+  /* ---------- gate and views ---------- */
+  function showGate(msg) {
+    VIEWS.forEach(v => $("#v-" + v).hidden = true); $("#nav").hidden = true; $("#whoWrap").hidden = true; $("#refresh").hidden = true;
+    $("#gate").hidden = false; if (msg) notice($("#gateMsg"), "err", msg); $("#code").focus();
+  }
+  $("#gateForm").addEventListener("submit", (e) => { e.preventDefault(); code = $("#code").value.trim(); if (!code) return; $("#gateMsg").hidden = true; load().then(ok => { if (ok) { store.set("lw-team-code", code); $("#gate").hidden = true; startApp(); } }); });
+  const VIEWS = ["clients", "today", "new", "reviews"];
+  function show(name) {
+    if (!VIEWS.includes(name)) name = "clients";
+    VIEWS.forEach(v => { $("#v-" + v).hidden = v !== name; });
+    $$("nav.views a").forEach(a => { if (a.dataset.view === name) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  }
+  window.addEventListener("hashchange", () => { const h = location.hash.slice(1); if (VIEWS.includes(h)) show(h); });
+  function startApp() {
+    $("#nav").hidden = false; $("#whoWrap").hidden = false; $("#refresh").hidden = false;
+    const h = location.hash.slice(1); show(VIEWS.includes(h) ? h : "clients");
   }
 
-  function showGate(msg){ $("#app").hidden = true; $("#gate").hidden = false; if (msg) { $("#gateMsg").textContent = msg; $("#gateMsg").hidden = false; } $("#code").focus(); }
-  $("#gateForm").addEventListener("submit", function(e){
-    e.preventDefault(); code = $("#code").value.trim(); if (!code) return;
-    load().then(function(ok){ if (ok) store.set("lw-team-code", code); });
-  });
-
-  function load(quiet){
-    return api("GET").then(function(d){
-      if (d.error === "bad_code") { store.set("lw-team-code", ""); showGate(loaded || $("#code").value ? "That code didn't work. Check it with Jess." : null); return false; }
-      if (!d.ok) throw new Error(d.error || "load");
-      var ids = {}; (d.feedback || []).forEach(function(v){ ids[v.id] = 1; });
-      var keep = notes.filter(function(v){ return freshIds[v.id] && !ids[v.id]; });
-      clients = d.clients || []; notes = keep.concat(d.feedback || []);
-      $("#gate").hidden = true; $("#app").hidden = false;
-      if (!loaded) { loaded = true; renderClients(); } else refreshClients();
-      renderNotes();
+  /* ---------- load ---------- */
+  async function load(quiet) {
+    if (!code) { showGate(); return false; }
+    $("#refresh").disabled = true;
+    try {
+      const d = await api("list");
+      const ids = new Set((d.notes || []).map(n => n.id));
+      const keep = notes.filter(n => freshIds[n.id] && !ids.has(n.id));
+      jobs = d.jobs || []; notes = keep.concat(d.notes || []); sync = d.sync; hub = d.hub; loadedAt = new Date().toISOString();
+      $("#pageMsg").hidden = true; loaded = true;
+      renderAll();
       return true;
-    }).catch(function(){
-      if (quiet && loaded) return true;
-      if (!code) { showGate(); return false; }
-      $("#gate").hidden = true; $("#app").hidden = false;
-      $("#recvSub").textContent = "Saved feedback couldn't load just now. Reload the page to try again.";
-      return false;
-    });
+    } catch (e) {
+      if (e.code === "bad_code") return false;
+      if (!(quiet && loaded)) notice($("#pageMsg"), "err", errText(e));
+      return loaded;
+    } finally { $("#refresh").disabled = false; }
+  }
+  $("#refresh").onclick = () => load();
+
+  /* ---------- actions ---------- */
+  async function act(j, to, set, note, msg, btns) {
+    btns.forEach(b => b.disabled = true);
+    try { await api("act", { id: j.id, from: j.status, to, set: set || {}, note }); notice(msg, "ok", to === "cancelled" ? "Removed." : QUEUED); setTimeout(load, 800); return true; }
+    catch (e) { notice(msg, e.code === "changed" ? "warn" : "err", errText(e)); if (e.code === "changed") load(true); btns.forEach(b => b.disabled = false); return false; }
+  }
+  async function saveClient(j, fields, msg, btn) {
+    if (btn) btn.disabled = true;
+    try { await api("save_client", { id: j.id, fields }); Object.assign(j, fields); if (msg) notice(msg, "ok", "Saved."); setTimeout(() => load(true), 500); }
+    catch (e) { if (msg) notice(msg, "err", "Not saved. " + errText(e)); else notice($("#pageMsg"), "err", "Not saved. " + errText(e)); }
+    finally { if (btn) btn.disabled = false; }
+  }
+  async function setNoteStatus(n, status) {
+    try { await api("note_status", { id: n.id, status }); n.status = status; renderAll(); } catch (e) { notice($("#pageMsg"), "err", errText(e)); }
   }
 
-  function drawer(id, name){
-    var key = id || "general";
-    return '<div class="fb-body">' +
-      '<form class="form" data-form="' + key + '" novalidate>' +
-        '<div class="field"><label for="txt-' + key + '">' + (id ? "Notes from the call" : "Your feedback") + '</label><textarea id="txt-' + key + '" placeholder="What did they like, what should change, what did they ask for?"></textarea></div>' +
-        '<div class="field"><label for="about-' + key + '">About</label><select id="about-' + key + '"><option value="call">The call</option><option value="site">The website</option><option value="presentation">The presentation</option><option value="audit">The audit</option><option value="general">Something else</option></select></div>' +
-        '<div class="field"><label for="file-' + key + '">Wispr transcript (optional)</label><input id="file-' + key + '" type="file" accept=".txt,.md,.vtt,.srt,.json,.csv,text/plain,text/markdown"><p class="hint">Text files only. For a screenshot or PDF, email it to hello@lekkeweb.co.za.</p></div>' +
-        '<div class="field"><label for="by-' + key + '">Your name</label><input id="by-' + key + '" type="text" autocomplete="given-name" placeholder="Laine" value="' + esc(store.get("lw-name") || "") + '"></div>' +
-        '<input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">' +
-        '<div class="chips"><button class="btn go" type="submit">Save feedback</button><span class="meta" role="status" aria-live="polite" data-status="' + key + '"></span></div>' +
-      '</form>' +
-      '<div class="log" data-log="' + key + '"></div>' +
-    '</div>';
+  /* ---------- shared bits ---------- */
+  const notesFor = (j) => notes.filter(n => n.job_id === j.id);
+  const openNotes = (j) => notesFor(j).filter(n => n.status === "open");
+  function chipsOf(j) {
+    const [label, kind] = statusOf(j);
+    return el("div", { class: "chips" },
+      j.lead_colour ? el("span", { class: "dot " + j.lead_colour, title: { green: "Meeting booked", blue: "High interest", amber: "Call back" }[j.lead_colour] || "" }) : null,
+      el("span", { class: "tag " + (j.track === "stoep" ? "stoep" : ""), text: j.track === "stoep" ? "R7,000" : "Custom" }),
+      WORKING.has(j.status) && j.builder_model === "fable" ? el("span", { class: "tag fable", text: "Fable" }) : null,
+      j.want_film && !j.film_url && (j.status === "done" || j.film_status) ? el("span", { class: "tag", title: j.film_note || "", text: { making: "Film being made", ready: "Film ready", failed: "Film needs a look" }[j.film_status] || "Film to make" }) : null,
+      j.status === "done" ? null : el("span", { class: "pill " + kind, text: label }));
+  }
+  function linkButtons(j) {
+    if (!built(j) && !["site_ready", "proposal_ready"].includes(j.status)) return null;
+    const pres = presentationOf(j);
+    const box = el("div", { class: "actions" },
+      pres ? ext(pres, j.track === "stoep" ? "Presentation" : "Proposal", "btn open small") : null,
+      ext(j.site_url, "Website", "btn ghost small"), ext(j.audit_url, "Audit", "btn ghost small"), ext(j.film_url, "Film", "btn ghost small"));
+    return box.children.length ? box : null;
   }
 
-  function clientHtml(c){
-    var L = c.links || {};
-    var pres = okUrl(L.presentation);
-    var links = [
-      pres ? '<a class="btn open" href="' + esc(pres) + '" target="_blank" rel="noopener">Presentation</a>' : "",
-      okUrl(L.site) ? '<a class="btn plain" href="' + esc(L.site) + '" target="_blank" rel="noopener">Website</a>' : "",
-      okUrl(L.audit) ? '<a class="btn plain" href="' + esc(L.audit) + '" target="_blank" rel="noopener">Audit</a>' : "",
-      okUrl(L.film) ? '<a class="btn plain" href="' + esc(L.film) + '" target="_blank" rel="noopener">Film</a>' : ""
-    ].join("");
-    var pts = (c.points || []).map(function(p){ return "<li>" + esc(p) + "</li>"; }).join("");
-    var asks = (c.asks || []).map(function(p){ return "<li>" + esc(p) + "</li>"; }).join("");
-    return '<article class="client glass" id="c-' + esc(c.id) + '" data-id="' + esc(c.id) + '">' +
-      '<div>' +
-        '<div class="head"><span class="dot ' + esc(c.colour || "") + '"></span><h3>' + esc(c.name) + '</h3>' +
-          (c.track === "stoep" ? '<span class="pill">R7,000</span>' : '<span class="pill">Custom</span>') +
-          (c.built ? "" : '<span class="pill blue">Being built</span>') + '</div>' +
-        '<p class="meta" style="margin:6px 0 0">' + esc([c.industry, c.town].filter(Boolean).join(", ")) + (c.contact ? " · Ask for " + esc(c.contact) : "") + (c.score ? " · Audit " + esc(c.score) + "/100" : "") + '</p>' +
-        (c.phone ? '<div class="copyline"><span>' + esc(c.phone) + '</span><button class="btn plain small" type="button" data-copy="' + esc(c.phone) + '">Copy number</button></div>' : "") +
-        (c.meeting_at ? '<p style="margin:10px 0 0"><span class="pill green">Meeting ' + esc(fmt(c.meeting_at, { weekday: "short" })) + '</span></p>' : (c.stage_note ? '<p class="meta" style="margin:10px 0 0">' + esc(c.stage_note) + '</p>' : "")) +
-        (links ? '<div class="links">' + links + '</div>' : '<p class="meta" style="margin:12px 0 0">' + esc(c.building_note || "Links show here once Jess approves it.") + '</p>') +
-        (pres ? '<div class="copyline"><span class="meta">Client link to send:</span><code>' + esc(pres.replace(/^https:\/\//, "")) + '</code><button class="btn plain small" type="button" data-copy="' + esc(pres) + '">Copy</button></div>' : "") +
-      '</div>' +
-      '<div class="sheet">' + (pts ? "<h4>Point out</h4><ul>" + pts + "</ul>" : "") + (asks ? "<h4>Ask them</h4><ul>" + asks + "</ul>" : "") + (!pts && !asks ? '<p class="meta">The call sheet shows here once the site is built.</p>' : "") + '</div>' +
-      '<details class="fb" data-fb="' + esc(c.id) + '"' + (openIds[c.id] ? " open" : "") + '><summary>Feedback <span class="pill" data-count="' + esc(c.id) + '"></span></summary>' + drawer(c.id, c.name) + '</details>' +
-    '</article>';
-  }
-
-  function renderClients(){
-    var term = $("#q").value.trim().toLowerCase();
-    var list = clients.filter(function(c){ return !term || [c.name, c.town, c.industry, c.contact].join(" ").toLowerCase().indexOf(term) >= 0; });
-    $("#count").textContent = list.length + (list.length === 1 ? " client" : " clients");
-    $("#groups").innerHTML = GROUPS.map(function(g){
-      var items = list.filter(function(c){ return groupOf(c) === g[0]; });
-      if (!items.length) return "";
-      items.sort(function(a, b){ return (a.meeting_at || "9") < (b.meeting_at || "9") ? -1 : 1; });
-      return '<section id="g-' + g[0] + '" style="display:flex;flex-direction:column;gap:12px;scroll-margin-top:120px"><div><h2>' + esc(g[1]) + ' <span class="meta" style="font:500 15px var(--font)">' + items.length + '</span></h2>' + (g[2] ? '<p class="meta" style="margin:2px 0 0">' + esc(g[2]) + '</p>' : "") + '</div>' + items.map(clientHtml).join("") + '</section>';
-    }).join("") || '<p class="meta">No clients match.</p>';
-    wire($("#groups"));
-    var present = GROUPS.filter(function(g){ return list.some(function(c){ return groupOf(c) === g[0]; }); });
-    $("#jump").innerHTML = present.map(function(g){ return '<a href="#g-' + g[0] + '">' + esc(g[1]) + '</a>'; }).join("") + '<a href="#feedback">Feedback</a><a href="#anything-else">Anything else</a>';
-    renderNotes();
-  }
-  /* Re-render without losing what someone is typing */
-  function refreshClients(){
-    var typing = document.activeElement && document.activeElement.closest && document.activeElement.closest("form[data-form]");
-    var drafts = {};
-    document.querySelectorAll("form[data-form] textarea").forEach(function(t){ if (t.value) drafts[t.id] = t.value; });
-    if (typing) return;
-    renderClients();
-    Object.keys(drafts).forEach(function(id){ var t = document.getElementById(id); if (t) t.value = drafts[id]; });
-  }
-  $("#q").addEventListener("input", renderClients);
-
-  function entryHtml(v){
-    return '<div class="entry' + (freshIds[v.id] ? " fresh" : "") + '" id="n-' + esc(v.id) + '"><div class="who">' + esc(v.author || "Someone") + " · " + esc(fmt(v.created_at)) + (v.about ? " · " + esc(v.about) : "") + (v.status === "done" ? " · done" : v.status === "sent_to_claude" ? " · with Claude" : "") + '</div><p>' + esc((v.body || "").length > 1200 ? v.body.slice(0, 1200) + "..." : v.body) + '</p>' + (v.reply ? '<div class="reply">Claude: ' + esc(v.reply) + '</div>' : "") + '</div>';
-  }
-  function renderNotes(){
-    var by = {};
-    notes.slice().sort(function(a, b){ return a.created_at < b.created_at ? 1 : -1; }).forEach(function(v){ var k = v.job_id || "general"; (by[k] = by[k] || []).push(v); });
-    document.querySelectorAll("[data-log]").forEach(function(box){
-      var k = box.getAttribute("data-log"), l = by[k] || [];
-      box.innerHTML = l.length ? l.map(entryHtml).join("") : '<p class="meta">Saved feedback for this ' + (k === "general" ? "box" : "client") + ' shows here.</p>';
-    });
-    document.querySelectorAll("[data-count]").forEach(function(c){ var l = by[c.getAttribute("data-count")] || []; c.textContent = l.length ? l.length + (l.length === 1 ? " note" : " notes") : "No notes yet"; c.className = "pill" + (l.length ? " green" : ""); });
-    var names = {}; clients.forEach(function(c){ names[c.id] = c.name; });
-    var keys = Object.keys(by).sort(function(a, b){ return by[a][0].created_at < by[b][0].created_at ? 1 : -1; });
-    if (!notes.length) { $("#recvSub").textContent = "Nothing saved yet. Your notes show here the moment you press Save."; $("#recvList").hidden = true; return; }
-    $("#recvSub").textContent = notes.length + (notes.length === 1 ? " note" : " notes") + " so far, newest first. Tap one to open it on its client.";
-    var sorted = notes.slice().sort(function(a, b){ return a.created_at < b.created_at ? 1 : -1; });
-    var shown = showAll ? sorted : sorted.slice(0, 6);
-    $("#moreFb").hidden = sorted.length <= 6; $("#moreFb").textContent = showAll ? "Show fewer" : "Show all " + sorted.length;
-    $("#recvList").hidden = false;
-    $("#recvList").innerHTML = shown.map(function(v){
-      var k = v.job_id || "general";
-      var body = (v.body || "").replace(/\s+/g, " ");
-      return '<li><button type="button" class="recv-item" data-open="' + esc(k) + '" data-note="' + esc(v.id) + '"><b>' + esc(k === "general" ? "Anything else" : (names[k] || "A client")) + '</b><span class="who">' + esc(v.author || "Someone") + " · " + esc(fmt(v.created_at)) + (v.about ? " · " + esc(v.about) : "") + '</span><span class="txt">' + esc(body.length > 220 ? body.slice(0, 220) + "..." : body) + '</span><span class="go">Open it</span></button></li>';
-    }).join("");
-  }
-
-  document.addEventListener("click", function(e){
-    var cp = e.target.closest && e.target.closest("[data-copy]");
-    if (cp) {
-      var t = cp.getAttribute("data-copy"), lbl = cp.textContent;
-      try { navigator.clipboard.writeText(t).then(function(){ cp.textContent = "Copied"; setTimeout(function(){ cp.textContent = lbl; }, 1500); }, function(){ cp.textContent = "Select it"; }); } catch (err) { cp.textContent = "Select it"; }
-      return;
+  /* ---------- review controls ---------- */
+  function reviewControls(j, msg) {
+    const box = el("div", { class: "stack" });
+    const dirs = Array.isArray(j.directions) ? j.directions : [];
+    if (j.status === "directions_ready" && dirs.length) {
+      const fb = el("textarea", { id: "dfb-" + j.id, placeholder: "Optional: tweaks for the build, or what's wrong with all three" });
+      const pick = [];
+      const none = el("button", { type: "button", class: "linkbtn", onclick: () => { if (!fb.value.trim()) { notice(msg, "warn", "Say what's missing in the box first, so the new looks fix it."); fb.focus(); return; } act(j, "directions_changes", { direction_feedback: fb.value }, "Asked for 3 new looks", msg, [...pick, none]); } }, "None of these, make three new looks");
+      box.append(el("div", { class: "dirs" }, dirs.map(d => {
+        const key = String(d.key || "").toUpperCase();
+        const b = el("button", { type: "button", class: "btn go small", onclick: () => act(j, "direction_chosen", { chosen_direction: d.key, direction_feedback: fb.value }, "Picked look " + key, msg, [...pick, none]) }, "Use this look");
+        pick.push(b);
+        const thumb = typeof d.thumb === "string" && d.thumb.startsWith("data:image/") ? d.thumb : null;
+        return el("div", { class: "dir" },
+          el("div", { class: "thumb" }, thumb ? el("img", { src: thumb, alt: "Look " + key + ", " + (d.name || "") }) : "Preview in the email"),
+          el("div", { class: "body" }, el("h3", { text: key + ". " + (d.name || "Look") }), d.idea ? el("p", { class: "idea", text: d.idea }) : null,
+            Array.isArray(d.palette) && d.palette.length ? el("div", { class: "dots", "aria-label": "Palette" }, d.palette.slice(0, 6).map(c => el("i", { style: "background:" + String(c).replace(/[^#a-zA-Z0-9(),.% ]/g, "") }))) : null,
+            d.fonts ? el("p", { class: "idea", text: d.fonts }) : null, el("div", { class: "act" }, b, ext(d.preview_url, "Open full screen", "btn ghost small"))));
+      })), el("label", { for: "dfb-" + j.id, text: "Notes for the build" }), fb, el("div", {}, none));
     }
-    var op = e.target.closest && e.target.closest("[data-open]");
-    if (op) {
+    const review = (field, approveTo, changeTo, approveText, what) => {
+      const ta = el("textarea", { id: field + "-" + j.id, placeholder: "What should change? One point per line works best." });
+      const ok = el("button", { type: "button", class: "btn go small", onclick: () => act(j, approveTo, {}, "Approved the " + what, msg, [ok, ch]) }, approveText);
+      const ch = el("button", { type: "button", class: "btn ghost small", onclick: () => { if (!ta.value.trim()) { notice(msg, "warn", "Write the changes in the box first."); ta.focus(); return; } act(j, changeTo, { [field]: ta.value }, "Asked for " + what + " changes", msg, [ok, ch]); } }, "Send changes");
+      box.append(el("label", { for: field + "-" + j.id, text: "Changes, if any" }), ta, el("div", { class: "actions" }, ok, ch));
+    };
+    if (j.status === "site_ready" && j.track === "stoep") review("site_feedback", "site_approved", "site_changes", "Approve, make the client link", "Stoep pack");
+    else if (j.status === "site_ready") review("site_feedback", "site_approved", "site_changes", "Approve, make the proposal", "website");
+    if (j.status === "proposal_ready") review("proposal_feedback", "proposal_approved", "proposal_changes", "Approve the proposal", "proposal");
+    if (j.status === "failed") {
+      const back = (j.last_claim && j.last_claim.stage) || "submitted";
+      const retry = el("button", { type: "button", class: "btn primary small", onclick: () => act(j, back, {}, "Retried the last step", msg, [retry]) }, "Try that step again");
+      const row = el("div", { class: "actions" }, retry);
+      if (j.track === "stoep") { const mv = el("button", { type: "button", class: "btn ghost small", onclick: () => act(j, "submitted", { track: "studio" }, "Moved to Custom Studio", msg, [retry, mv]) }, "Move it to Custom Studio"); row.append(mv); }
+      box.append(row);
+    }
+    return box.children.length ? box : null;
+  }
+
+  /* ---------- feedback drawer (per client and general) ---------- */
+  function entryNode(v) {
+    const n = el("div", { class: "entry" + (freshIds[v.id] ? " fresh" : ""), id: "n-" + v.id },
+      el("div", { class: "who", text: (v.author || "Someone") + " · " + fmt(v.created_at) + (v.about ? " · " + v.about : "") + (v.status === "done" ? " · done" : v.status === "sent_to_claude" ? " · with Claude" : "") }),
+      el("p", { text: (v.body || "").length > 1500 ? v.body.slice(0, 1500) + "..." : (v.body || "") }),
+      v.reply ? el("div", { class: "reply", text: "Claude: " + v.reply }) : null);
+    return n;
+  }
+  function feedbackBox(jobId, label) {
+    const key = jobId || "general";
+    const msg = el("span", { class: "meta", role: "status", "aria-live": "polite" });
+    const ta = el("textarea", { id: "txt-" + key, placeholder: "What did they like, what should change, what did they ask for?" });
+    const about = el("select", { id: "about-" + key }, [["call", "The call"], ["site", "The website"], ["presentation", "The presentation"], ["audit", "The audit"], ["general", "Something else"]].map(([v, t]) => el("option", { value: v }, t)));
+    const file = el("input", { id: "file-" + key, type: "file", accept: ".txt,.md,.vtt,.srt,.json,.csv,text/plain,text/markdown" });
+    const hp = el("input", { class: "hp", type: "text", name: "website", tabindex: "-1", autocomplete: "off", "aria-hidden": "true" });
+    const save = el("button", { class: "btn go small", type: "submit" }, "Save feedback");
+    const form = el("form", { class: "stack", novalidate: true },
+      el("div", { class: "field" }, el("label", { for: "txt-" + key, text: label }), ta),
+      el("div", { class: "field" }, el("label", { for: "about-" + key, text: "About" }), about),
+      el("div", { class: "field" }, el("label", { for: "file-" + key, text: "Wispr transcript (optional)" }), file, el("p", { class: "hint", text: "Text files only. For a screenshot or PDF, email it to hello@lekkeweb.co.za." })),
+      hp, el("div", { class: "actions" }, save, msg));
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      var k = op.getAttribute("data-open"), nid = op.getAttribute("data-note");
-      if (k !== "general") { var d = document.querySelector('[data-fb="' + k + '"]'); if (d) { d.open = true; openIds[k] = 1; } }
-      var target = (nid && document.getElementById("n-" + nid)) || (k === "general" ? $("#anything-else") : document.querySelector('[data-fb="' + k + '"]'));
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "center" });
-        if (target.classList.contains("entry")) { target.classList.remove("flash"); void target.offsetWidth; target.classList.add("flash"); }
-      }
-    }
-  });
-  document.addEventListener("toggle", function(e){ var d = e.target; if (d && d.getAttribute && d.getAttribute("data-fb")) { if (d.open) openIds[d.getAttribute("data-fb")] = 1; else delete openIds[d.getAttribute("data-fb")]; } }, true);
-
-  function wire(root){
-    root.querySelectorAll("form[data-form]").forEach(function(f){
-      if (f.dataset.wired) return; f.dataset.wired = "1";
-      f.addEventListener("submit", function(e){
-        e.preventDefault();
-        var key = f.getAttribute("data-form"), status = f.querySelector("[data-status]");
-        var text = f.querySelector("textarea").value.trim();
-        var file = f.querySelector("input[type=file]").files[0];
-        var by = f.querySelector('input[id^="by-"]').value.trim();
-        var setS = function(msg, kind){ status.textContent = msg; status.style.color = kind === "bad" ? "var(--red)" : kind === "ok" ? "var(--green)" : ""; };
-        if (!text && !file) { setS("Add a note or choose a transcript first.", "bad"); return; }
-        if (file && !(TEXT_FILE.test(file.name) || /^text\//.test(file.type))) { setS("Only text transcripts can be attached here. Paste the text instead, or email the file.", "bad"); return; }
-        if (by) store.set("lw-name", by);
-        var btn = f.querySelector("button[type=submit]"); btn.disabled = true; setS("Saving...");
-        var row = { job_id: key === "general" ? null : key, body: text, author: by, about: f.querySelector("select").value, website: f.querySelector('input[name="website"]').value };
-        (file ? file.text().then(function(t){ row.transcript = t; row.file_name = file.name; }) : Promise.resolve())
-          .then(function(){ return api("POST", row); })
-          .then(function(d){
-            if (d.status >= 500) return new Promise(function(r){ setTimeout(r, 1200); }).then(function(){ return api("POST", row); });
-            return d;
-          })
-          .then(function(d){
-            if (!d.ok) { var er = new Error(d.error); er.code = d.error; throw er; }
-            if (d.note) { freshIds[d.note.id] = 1; notes.unshift(d.note); }
-            f.reset(); f.querySelector('input[id^="by-"]').value = store.get("lw-name") || "";
-            renderNotes();
-            setS("Saved. Jess and Hannes can see it in the Studio now.", "ok");
-          })
-          .catch(function(err){
-            var msgs = { bad_code: "Your team code stopped working. Reload the page and enter the new one.", unknown_client: "This client was removed. Use Anything else at the bottom.", empty: "Add a note first." };
-            setS((err && msgs[err.code]) || "That didn't save. Check your connection and press Save again. Your notes are still in the box.", "bad");
-          })
-          .then(function(){ btn.disabled = false; });
-      });
+      const f = file.files[0], text = ta.value.trim();
+      const setS = (m, kind) => { msg.textContent = m; msg.style.color = kind === "bad" ? "var(--red)" : kind === "ok" ? "var(--green)" : ""; };
+      if (!text && !f) { setS("Add a note or choose a transcript first.", "bad"); return; }
+      if (f && !(TEXT_FILE.test(f.name) || /^text\//.test(f.type))) { setS("Only text transcripts can be attached here. Paste the text instead.", "bad"); return; }
+      save.disabled = true; setS("Saving...");
+      try {
+        const row = { job_id: jobId, body: text, author: who(), about: about.value, website: hp.value, source: who() === "Jess" || who() === "Hannes" ? "studio" : "hub", kind: who() === "Jess" || who() === "Hannes" ? "internal" : "client" };
+        if (f) { row.transcript = await f.text(); row.file_name = f.name; }
+        const d = await api("add_note", row);
+        if (d.note) { freshIds[d.note.id] = 1; notes.unshift(d.note); }
+        form.reset(); renderAll(); setS("Saved. Jess gets an email within the hour.", "ok");
+      } catch (err) { setS(errText(err), "bad"); }
+      finally { save.disabled = false; }
     });
+    const log = el("div", { class: "stack logcol", "data-log": key });
+    return el("div", { class: "fb-body" }, form, log);
+  }
+  function fillLogs() {
+    const by = {};
+    notes.slice().sort((a, b) => a.created_at < b.created_at ? 1 : -1).forEach(v => { const k = v.job_id || "general"; (by[k] = by[k] || []).push(v); });
+    $$("[data-log]").forEach(box => { const l = by[box.dataset.log] || []; box.replaceChildren(...(l.length ? l.map(entryNode) : [el("p", { class: "empty", text: "Saved feedback shows here." })])); });
+    return by;
   }
 
-  $("#moreFb").addEventListener("click", function(){ showAll = !showAll; renderNotes(); });
-  $("#general").innerHTML = drawer(null, "Anything else");
-  wire($("#general"));
-  if (!code) showGate(); else load();
-  setInterval(function(){ if (!document.hidden && loaded) load(true); }, 60000);
-  document.addEventListener("visibilitychange", function(){ if (!document.hidden && loaded) load(true); });
+  /* ---------- Clients (front page) ---------- */
+  function clientCard(j) {
+    const pts = Array.isArray(j.call_points) ? j.call_points : [], asks = Array.isArray(j.call_asks) ? j.call_asks : [];
+    const pres = presentationOf(j);
+    const n = notesFor(j).length;
+    const stageSel = el("select", { "aria-label": "Stage for " + j.business_name, id: "stage-" + j.id, style: "width:auto" });
+    Object.entries(STAGE_SHORT).forEach(([v, t]) => stageSel.append(el("option", { value: v, selected: (j.client_stage || "not_sent") === v }, t)));
+    stageSel.addEventListener("change", () => saveClient(j, { client_stage: stageSel.value }));
+    const fbWrap = el("div", { class: "fbwrap", hidden: !openFb[j.id] }, feedbackBox(j.id, "Notes from the call"));
+    const fbBtn = el("button", { type: "button", class: "btn ghost small", "aria-expanded": String(!!openFb[j.id]) }, n ? "Feedback (" + n + ")" : "Feedback");
+    fbBtn.addEventListener("click", () => { openFb[j.id] = !openFb[j.id]; fbWrap.hidden = !openFb[j.id]; fbBtn.setAttribute("aria-expanded", String(!!openFb[j.id])); if (openFb[j.id]) fillLogs(); });
+    return el("article", { class: "card client", id: "c-" + j.id },
+      el("div", { class: "stack", style: "gap:8px" },
+        el("div", { class: "chips" }, el("h3", { text: j.business_name }), chipsOf(j)),
+        el("span", { class: "meta", text: [j.industry, j.town].filter(Boolean).join(", ") + (j.contact_name ? " · Ask for " + j.contact_name : "") + (j.audit_score ? " · Audit " + j.audit_score + "/100" : "") }),
+        j.contact_phone ? el("div", { class: "copyline" }, el("span", { text: j.contact_phone }), copyBtn(j.contact_phone, "Copy number")) : null,
+        j.meeting_at ? el("div", {}, el("span", { class: "pill work", text: "Meeting " + fmtMeet(j.meeting_at) })) : (j.client_stage_note ? el("span", { class: "meta", text: j.client_stage_note }) : null),
+        linkButtons(j) || el("span", { class: "meta", text: built(j) ? "No links yet." : (j.stage_note || "Being built") + (j.updated_at ? " (" + ago(j.updated_at) + ")" : "") }),
+        pres && built(j) ? el("div", { class: "copyline" }, el("span", { class: "meta", text: "Client link to send:" }), el("code", { text: pres.replace(/^https:\/\//, "") }), copyBtn(pres)) : null),
+      el("div", { class: "sheetcol" },
+        pts.length ? [el("h4", { text: "Point out" }), el("ul", {}, pts.map(p => el("li", { text: String(p) })))] : null,
+        asks.length ? [el("h4", { text: "Ask them" }), el("ul", {}, asks.map(p => el("li", { text: String(p) })))] : null,
+        !pts.length && !asks.length ? el("p", { class: "empty", text: "The call sheet shows here once the site is built." }) : null),
+      el("div", { class: "foot" }, fbBtn, el("label", { class: "who-sel", for: "stage-" + j.id }, el("span", { text: "Stage" }), stageSel), el("button", { type: "button", class: "linkbtn", onclick: () => openDrawer(j.id) }, "Details and changes")),
+      fbWrap);
+  }
+  function renderClients() {
+    const fb = $("#fl-batch"), keepB = fb.value || "all";
+    const batches = [...new Set(jobs.map(j => j.batch).filter(Boolean))].sort();
+    fb.replaceChildren(el("option", { value: "all" }, "All batches"), ...batches.map(b => el("option", { value: b }, b)));
+    fb.value = batches.includes(keepB) ? keepB : "all";
+    const term = $("#q").value.trim().toLowerCase(), tr = $("#fl-track").value, bt = fb.value;
+    const list = jobs.filter(j => !isBatch(j)).filter(j => (tr === "all" || j.track === tr) && (bt === "all" || j.batch === bt) && (!term || [j.business_name, j.town, j.industry, j.contact_name].join(" ").toLowerCase().includes(term)));
+    $("#count").textContent = list.length + (list.length === 1 ? " client" : " clients");
+    const out = [], present = [];
+    STAGES.forEach(([v, t]) => {
+      const g = list.filter(j => groupOf(j) === v); if (!g.length) return;
+      present.push([v, t]);
+      g.sort((a, b) => (a.meeting_at || "9") < (b.meeting_at || "9") ? -1 : 1);
+      out.push(el("section", { id: "g-" + v, class: "stack", style: "scroll-margin-top:130px" }, el("div", { class: "group-label" }, el("h3", { text: t }), el("span", { class: "meta", text: String(g.length) })), ...g.map(clientCard)));
+    });
+    $("#groups").replaceChildren(...(out.length ? out : [el("p", { class: "empty", text: jobs.length ? "No clients match." : "No clients yet. Start one on New website." })]));
+    $("#jump").replaceChildren(...present.map(([v, t]) => el("a", { href: "#g-" + v, onclick: (e) => { e.preventDefault(); $("#g-" + v).scrollIntoView({ behavior: "smooth" }); } }, t)),
+      el("a", { href: "#feedback", onclick: (e) => { e.preventDefault(); $("#feedback").scrollIntoView({ behavior: "smooth" }); } }, "Feedback"),
+      el("a", { href: "#anything-else", onclick: (e) => { e.preventDefault(); $("#anything-else").scrollIntoView({ behavior: "smooth" }); } }, "Anything else"));
+  }
+  /* Re-render only when nobody is typing in this view */
+  function safeRenderClients() {
+    const a = document.activeElement;
+    if (a && $("#v-clients").contains(a) && /TEXTAREA|INPUT|SELECT/.test(a.tagName) && a.id !== "q") return;
+    renderClients();
+  }
+  ["#q", "#fl-track", "#fl-batch"].forEach(s => $(s).addEventListener("input", () => { renderClients(); fillLogs(); }));
+
+  function renderRecv() {
+    const names = {}; jobs.forEach(j => names[j.id] = j.business_name);
+    const sorted = notes.slice().sort((a, b) => a.created_at < b.created_at ? 1 : -1);
+    if (!sorted.length) { $("#recvSub").textContent = "Nothing saved yet. Notes show here the moment someone presses Save."; $("#recvList").hidden = true; $("#moreFb").hidden = true; return; }
+    $("#recvSub").textContent = sorted.length + (sorted.length === 1 ? " note" : " notes") + " so far, newest first. Tap one to open it on its client.";
+    const shown = showAllFb ? sorted : sorted.slice(0, 5);
+    $("#moreFb").hidden = sorted.length <= 5; $("#moreFb").textContent = showAllFb ? "Show fewer" : "Show all " + sorted.length;
+    $("#recvList").hidden = false;
+    $("#recvList").replaceChildren(...shown.map(v => {
+      const k = v.job_id || "general", body = (v.body || "").replace(/\s+/g, " ");
+      return el("li", {}, el("button", { type: "button", class: "recv-item", onclick: () => jumpToNote(k, v.id) },
+        el("b", { text: k === "general" ? "Anything else" : (names[k] || "A client") }),
+        el("span", { class: "src", text: (v.author || "Someone") + " · " + fmt(v.created_at) + (v.about ? " · " + v.about : "") + (v.status !== "open" ? " · " + ({ done: "done", sent_to_claude: "with Claude", wontfix: "left as is" }[v.status] || v.status) : "") }),
+        el("span", { text: body.length > 220 ? body.slice(0, 220) + "..." : body }),
+        el("span", { class: "go", text: "Open it" })));
+    }));
+  }
+  $("#moreFb").onclick = () => { showAllFb = !showAllFb; renderRecv(); };
+  function jumpToNote(k, id) {
+    if (location.hash.slice(1) !== "clients") { location.hash = "clients"; show("clients"); }
+    if (k !== "general" && !openFb[k]) { openFb[k] = true; renderClients(); }
+    fillLogs();
+    setTimeout(() => {
+      const t = document.getElementById("n-" + id) || (k === "general" ? $("#anything-else") : $("#c-" + k));
+      if (!t) return;
+      t.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (t.classList.contains("entry")) { t.classList.remove("flash"); void t.offsetWidth; t.classList.add("flash"); }
+    }, 60);
+  }
+
+  /* ---------- Needs you ---------- */
+  function needsCard(j) {
+    const msg = el("div", { class: "notice", hidden: true });
+    const no = openNotes(j).length;
+    return el("article", { class: "card job needs stack" },
+      el("div", { class: "job-head" }, el("div", { class: "job-title" }, el("h3", { text: j.business_name }), el("span", { class: "meta", text: [j.industry, j.town].filter(Boolean).join(", ") + (j.audit_score ? "  |  audit " + j.audit_score + "/100" : "") })), chipsOf(j)),
+      j.stage_note ? el("span", { class: "meta", text: j.stage_note + " (" + ago(j.updated_at) + ")" }) : null,
+      linkButtons(j), reviewControls(j, msg),
+      el("div", { class: "actions" }, el("button", { type: "button", class: "linkbtn", onclick: () => openDrawer(j.id) }, "Details" + (no ? " (" + no + " open note" + (no === 1 ? "" : "s") + ")" : "")),
+        j.confirm_list ? el("details", { class: "confirm" }, el("summary", { class: "linkbtn quiet", text: "Confirm with the client before launch" }), el("pre", { text: j.confirm_list })) : null),
+      msg);
+  }
+  function renderToday() {
+    const real = jobs.filter(j => !isBatch(j));
+    const needs = real.filter(j => statusOf(j)[1] === "you" || j.status === "failed");
+    $("#c-needs").hidden = !needs.length; $("#c-needs").textContent = needs.length;
+    $("#needsMeta").textContent = needs.length ? needs.length + " waiting" : "";
+    if (!$("#v-today").contains(document.activeElement) || !/TEXTAREA|INPUT/.test(document.activeElement.tagName))
+      $("#t-needs").replaceChildren(...(needs.length ? needs.map(needsCard) : [el("p", { class: "empty", text: "Nothing waiting for approval." })]));
+    const counts = {}; real.forEach(j => { const s = groupOf(j); counts[s] = (counts[s] || 0) + 1; });
+    $("#strip").replaceChildren(...STAGES.filter(([v]) => counts[v]).map(([v, t]) => el("button", { type: "button", onclick: () => { location.hash = "clients"; show("clients"); setTimeout(() => { const g = $("#g-" + v); if (g) g.scrollIntoView({ behavior: "smooth" }); }, 50); } }, el("b", { text: String(counts[v]) }), t)));
+    const now = Date.now(), end = now + 14 * 864e5;
+    const soon = real.map(j => ({ j, at: j.meeting_at ? new Date(j.meeting_at).getTime() : (j.next_step_at ? new Date(j.next_step_at + "T09:00:00+02:00").getTime() : null) }))
+      .filter(x => x.at && x.at > now - 12 * 36e5 && x.at < end).sort((a, b) => a.at - b.at);
+    $("#t-soon").replaceChildren(...(soon.length ? soon.map(({ j }) => el("div", { class: "row" },
+      el("div", { class: "who" }, el("span", { class: "dot " + (j.lead_colour || "") }), el("div", { class: "job-title" }, el("button", { type: "button", class: "name", onclick: () => openDrawer(j.id) }, j.business_name), el("span", { class: "meta", text: (j.meeting_at ? "Meeting " + fmtMeet(j.meeting_at) : "Next step " + fmtDay(j.next_step_at)) + (j.contact_name ? "  |  ask for " + j.contact_name : "") }))),
+      linkButtons(j) || el("span", { class: "meta", text: "No links yet" }),
+      el("div", { class: "side" }, j.contact_phone ? copyBtn(j.contact_phone, "Copy number") : null)))
+      : [el("p", { class: "empty", text: "No meetings or follow-ups in the next two weeks. Add one under Details on a client." })]));
+    const work = jobs.filter(j => WORKING.has(j.status));
+    $("#t-work").replaceChildren(...(work.length ? work.map(j => el("div", { class: "row" },
+      el("div", { class: "who" }, el("div", { class: "job-title" }, el("button", { type: "button", class: "name", onclick: () => openDrawer(j.id) }, j.business_name), el("span", { class: "meta", text: (j.stage_note || "Waiting its turn") + "  |  " + ago(j.updated_at) }))),
+      chipsOf(j), el("div", { class: "side" }))) : [el("p", { class: "empty", text: "Nothing cooking right now." })]));
+  }
+
+  /* ---------- Reviews ---------- */
+  const NOTE_STATUS = { open: "Open", sent_to_claude: "With Claude", done: "Done", wontfix: "Left as is" };
+  function noteItem(n, opts) {
+    const o = opts || {};
+    const name = n.job_id ? ((jobs.find(j => j.id === n.job_id) || {}).business_name || "A client") : "General";
+    const txt = el("div", { class: "txt" },
+      el("div", { class: "chips" },
+        o.showClient ? (n.job_id ? el("button", { type: "button", class: "linkbtn", onclick: () => openDrawer(n.job_id) }, name) : el("b", { text: "General" })) : null,
+        el("span", { class: "src", text: (n.author || "Someone") + ", " + fmt(n.created_at) + (n.about && n.about !== "general" && n.about !== "call" ? ", about the " + n.about : n.about === "call" ? ", about the call" : "") }),
+        n.status !== "open" ? el("span", { class: "pill " + (n.status === "sent_to_claude" ? "work" : "done"), text: NOTE_STATUS[n.status] || n.status }) : null),
+      el("p", { text: n.body || "" }), n.reply ? el("div", { class: "reply", text: "Claude: " + n.reply }) : null);
+    const acts = el("div", { class: "actions", style: "margin-top:6px" });
+    if (n.status === "open") acts.append(el("button", { type: "button", class: "linkbtn quiet", onclick: () => setNoteStatus(n, "done") }, "Mark done"));
+    else if (n.status === "done" || n.status === "wontfix") acts.append(el("button", { type: "button", class: "linkbtn quiet", onclick: () => setNoteStatus(n, "open") }, "Reopen"));
+    if (acts.children.length) txt.append(acts);
+    const row = el("div", { class: "note" }); if (o.select) row.append(o.select); row.append(txt);
+    return row;
+  }
+  function renderReviews() {
+    const open = notes.filter(n => n.status === "open").length;
+    $("#c-notes").hidden = !open; $("#c-notes").textContent = open;
+    $("#n-open").setAttribute("aria-pressed", String(noteFilter === "open")); $("#n-all").setAttribute("aria-pressed", String(noteFilter === "all"));
+    const list = noteFilter === "open" ? notes.filter(n => n.status === "open" || n.status === "sent_to_claude") : notes;
+    $("#noteList").replaceChildren(...(list.length ? list.map(n => noteItem(n, { showClient: true })) : [el("p", { class: "empty", text: noteFilter === "open" ? "No open reviews." : "No reviews yet." })]));
+    $("#hubSync").textContent = sync && sync.done_at ? "Last pulled " + ago(sync.done_at) : (sync && sync.requested_at ? "Pull queued" : "");
+    const c = hub && hub.team_code;
+    $("#shareInfo").replaceChildren(
+      el("p", { class: "meta", style: "margin:0", text: "Everyone on the team uses this same page. Send them the link with the code built in, so they never have to type it." }),
+      el("div", { class: "copyline" }, el("span", { text: "Link:" }), el("code", { text: SITE.replace(/^https:\/\//, "") }), c ? copyBtn(SITE + "#k=" + encodeURIComponent(c), "Copy link with code") : null),
+      c ? el("div", { class: "copyline" }, el("span", { text: "Team code:" }), el("code", { text: c }), copyBtn(c, "Copy code")) : null);
+  }
+  $("#n-open").onclick = () => { noteFilter = "open"; renderReviews(); };
+  $("#n-all").onclick = () => { noteFilter = "all"; renderReviews(); };
+  $("#pullHub").onclick = async () => { const b = $("#pullHub"); b.disabled = true; try { await api("pull_hub"); notice($("#notesMsg"), "ok", "Queued. Claude pulls them at its next hourly check."); load(true); } catch (e) { notice($("#notesMsg"), "err", errText(e)); } finally { b.disabled = false; } };
+
+  /* ---------- drawer ---------- */
+  let lastFocus = null;
+  function openDrawer(id) { lastFocus = document.activeElement; openId = id; renderDrawer(); $("#veil").hidden = false; $("#drawer").hidden = false; $("#drawer").focus(); }
+  function closeDrawer() { openId = null; $("#veil").hidden = true; $("#drawer").hidden = true; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+  $("#veil").onclick = closeDrawer;
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && openId) closeDrawer(); });
+  function renderDrawer() {
+    const d = $("#drawer"), j = jobs.find(x => x.id === openId);
+    if (!j) { if (openId) closeDrawer(); return; }
+    const msg = el("div", { class: "notice", hidden: true });
+    const fld = (lbl, id, input) => el("div", { class: "field" }, el("label", { for: id, text: lbl }), input);
+    d.replaceChildren(
+      el("div", { class: "drawer-head" }, el("div", { class: "job-title" }, el("h2", { id: "d-title", text: j.business_name }), el("span", { class: "meta", text: [j.industry, j.town, j.batch].filter(Boolean).join(", ") })), el("button", { type: "button", class: "btn ghost small", onclick: closeDrawer }, "Close")),
+      el("div", { style: "margin-top:10px" }, chipsOf(j)),
+      j.stage_note ? el("p", { class: "meta", style: "margin:8px 0 0", text: j.stage_note + " (" + ago(j.updated_at) + ")" }) : null);
+    const lb = el("div", { class: "block" }, el("h3", { text: "Links" }));
+    const pres = presentationOf(j);
+    if (pres && built(j)) lb.append(el("div", { class: "copyline" }, el("span", { text: "Client link to send:" }), el("code", { text: pres.replace(/^https:\/\//, "") }), copyBtn(pres)));
+    lb.append(linkButtons(j) || el("p", { class: "meta", style: "margin:0", text: "No pages yet." }), j.drive_folder_url ? ext(j.drive_folder_url, "Drive folder") : null);
+    d.append(lb);
+    const rc = reviewControls(j, msg); if (rc) d.append(el("div", { class: "block" }, el("h3", { text: "Jess's call" }), rc));
+    const stage = el("select", { id: "d-stage" }, Object.entries(STAGE_SHORT).map(([v, t]) => el("option", { value: v, selected: (j.client_stage || "not_sent") === v }, t)));
+    const colour = el("select", { id: "d-colour" }, [["", "Not called yet"], ["green", "Green, meeting booked"], ["blue", "Blue, high interest"], ["amber", "Amber, call back"]].map(([v, t]) => el("option", { value: v, selected: (j.lead_colour || "") === v }, t)));
+    const meet = el("input", { type: "datetime-local", id: "d-meet", value: toLocalInput(j.meeting_at) });
+    const next = el("input", { type: "date", id: "d-next", value: j.next_step_at || "" });
+    const cname = el("input", { type: "text", id: "d-contact", value: j.contact_name || "", autocomplete: "off" });
+    const phone = el("input", { type: "tel", id: "d-phone", value: j.contact_phone || "", autocomplete: "off" });
+    const snote = el("textarea", { id: "d-snote", placeholder: "Where it stands: what they said, what's next" }); snote.value = j.client_stage_note || "";
+    const saveB = el("button", { type: "button", class: "btn primary small" }, "Save client details");
+    saveB.addEventListener("click", () => saveClient(j, { client_stage: stage.value, lead_colour: colour.value || null, meeting_at: fromLocalInput(meet.value), next_step_at: next.value || null, contact_name: cname.value, contact_phone: phone.value, client_stage_note: snote.value }, msg, saveB));
+    d.append(el("div", { class: "block" }, el("h3", { text: "The client" }), el("div", { class: "kv" }, fld("Stage", "d-stage", stage), fld("Lead", "d-colour", colour), fld("Meeting", "d-meet", meet), fld("Next step on", "d-next", next), fld("Ask for", "d-contact", cname), fld("Phone", "d-phone", phone)), fld("Notes on where it stands", "d-snote", snote), el("div", { class: "actions" }, saveB)));
+    if (j.confirm_list) d.append(el("div", { class: "block confirm" }, el("h3", { text: "Confirm with the client before launch" }), el("pre", { text: j.confirm_list })));
+    const mine = notesFor(j), selectable = mine.filter(n => n.status === "open"), boxes = new Map(), sendMsg = el("div", { class: "notice", hidden: true });
+    const nb = el("div", { class: "block" }, el("h3", { text: "Feedback" }));
+    nb.append(mine.length ? el("div", { class: "card stack" }, mine.map(n => { let c = null; if (n.status === "open") { c = el("input", { type: "checkbox", id: "sel-" + n.id, "aria-label": "Send this to Claude" }); boxes.set(n.id, c); } return noteItem(n, { select: c }); })) : el("p", { class: "empty", text: "No feedback on this client yet." }));
+    if (selectable.length) {
+      const aboutSel = el("select", { id: "send-about", "aria-label": "As changes to", style: "width:auto" }, (j.status === "directions_ready" ? [["look", "the looks"]] : [["site", "the website"], ["presentation", j.track === "stoep" ? "the breakdown page" : "the proposal"]]).map(([v, t]) => el("option", { value: v }, t)));
+      const send = el("button", { type: "button", class: "btn open small" }, "Send ticked feedback to Claude");
+      send.addEventListener("click", async () => {
+        const ids = selectable.filter(n => boxes.get(n.id) && boxes.get(n.id).checked).map(n => n.id);
+        if (!ids.length) { notice(sendMsg, "warn", "Tick the feedback you want Claude to act on first."); return; }
+        send.disabled = true;
+        try { const r = await api("send_notes", { job_id: j.id, note_ids: ids, about: aboutSel.value }); notice(sendMsg, "ok", r.count + " sent as " + r.what + ". " + QUEUED); setTimeout(load, 800); }
+        catch (e) { notice(sendMsg, "warn", errText(e)); send.disabled = false; }
+      });
+      nb.append(el("div", { class: "actions" }, el("span", { class: "meta", text: "As changes to" }), aboutSel, send), sendMsg);
+    }
+    d.append(nb);
+    if (j.status === "submitted" || j.status === "failed") {
+      const trS = el("select", { id: "d-track" }, [["stoep", "R7,000 Stoep page"], ["studio", "Custom Studio"]].map(([v, t]) => el("option", { value: v, selected: j.track === v }, t)));
+      const mdS = el("select", { id: "d-model" }, [["fable", "Claude Fable"], ["standard", "Standard"]].map(([v, t]) => el("option", { value: v, selected: j.builder_model === v }, t)));
+      const sv = el("button", { type: "button", class: "btn ghost small" }, "Save");
+      sv.addEventListener("click", () => saveClient(j, { track: trS.value, builder_model: mdS.value }, msg, sv));
+      d.append(el("div", { class: "block" }, el("h3", { text: "Before Claude starts" }), el("div", { class: "kv" }, fld("Offer", "d-track", trS), fld("Who builds it", "d-model", mdS)), el("div", {}, sv)));
+    }
+    const lg = Array.isArray(j.recent_log) ? j.recent_log : [];
+    if (lg.length) d.append(el("div", { class: "block" }, el("h3", { text: "History" }), el("ul", { class: "log" }, lg.map(l => el("li", {}, el("b", { text: fmt(l.at) }), " " + (STATUS[l.stage] ? STATUS[l.stage][0] : (l.stage || "")) + (l.note ? ": " + l.note : ""))))));
+    if (!["done", "cancelled"].includes(j.status) && !LOCKED.has(j.status)) {
+      const rm = el("button", { type: "button", class: "linkbtn quiet" }, "Remove this job");
+      rm.addEventListener("click", async () => { if (rm.dataset.sure) { if (await act(j, "cancelled", {}, "Removed", msg, [rm])) setTimeout(closeDrawer, 800); } else { rm.dataset.sure = "1"; rm.textContent = "Click again to remove it for good"; } });
+      d.append(el("div", { class: "block" }, el("div", {}, rm)));
+    }
+    d.append(msg);
+  }
+
+  function renderAll() {
+    safeRenderClients(); renderRecv(); renderToday(); renderReviews(); fillLogs();
+    if (openId) { const sc = $("#drawer").scrollTop; const a = document.activeElement; if (!($("#drawer").contains(a) && /TEXTAREA|INPUT|SELECT/.test(a.tagName))) { renderDrawer(); $("#drawer").scrollTop = sc; } }
+    $("#refresh").title = loadedAt ? "Updated " + fmt(loadedAt, { day: undefined, month: undefined }) : "";
+    const inds = new Set(SEED_INDUSTRIES); jobs.forEach(j => j.industry && inds.add(j.industry));
+    $("#industries").replaceChildren(...[...inds].sort().map(v => el("option", { value: v })));
+  }
+
+  /* ---------- New website ---------- */
+  let mode = "one";
+  const track = () => (document.querySelector('input[name="track"]:checked') || {}).value || "stoep";
+  function syncForm() {
+    $("#m-one").setAttribute("aria-pressed", String(mode === "one")); $("#m-sheet").setAttribute("aria-pressed", String(mode === "sheet"));
+    $("#sheetPart").hidden = mode !== "sheet"; $("#onePart").hidden = mode !== "one";
+    $("#studioOnly").hidden = !(mode === "one" && track() === "studio");
+    $("#submitBtn").textContent = mode === "sheet" ? "Queue the whole sheet" : "Start this website";
+    $("#submitHint").textContent = mode === "sheet" ? "Claude reads the sheet at its next hourly check, skips clients already here and emails the list." : "Claude starts at its next hourly check and emails jess@lekkeweb.co.za when there is something to check.";
+  }
+  $("#m-one").onclick = () => { mode = "one"; syncForm(); };
+  $("#m-sheet").onclick = () => { mode = "sheet"; syncForm(); };
+  $$('input[name="track"]').forEach(r => r.addEventListener("change", syncForm));
+  $$('input[name="offer"]').forEach(r => r.addEventListener("change", () => { $("#f-offer-custom").hidden = document.querySelector('input[name="offer"]:checked').value !== "custom"; }));
+  function addRef(url = "", why = "") {
+    const i = $("#refs").children.length + 1;
+    const row = el("div", { class: "ref" },
+      el("input", { type: "url", id: "ref-url-" + i, placeholder: "https://site-you-love.com", "aria-label": "Reference " + i + " link", value: url }),
+      el("input", { type: "text", id: "ref-why-" + i, placeholder: "What you love: the load screen, the bold type", "aria-label": "Reference " + i + ", what you love", value: why }),
+      el("button", { type: "button", class: "btn ghost small", "aria-label": "Remove reference " + i, onclick: () => { row.remove(); if (!$("#refs").children.length) addRef(); } }, "Remove"));
+    $("#refs").append(row);
+  }
+  addRef(); addRef();
+  $("#addRef").onclick = () => addRef();
+  let picked = [];
+  const drop = $("#drop"), fin = $("#f-files");
+  const renderFiles = () => $("#fileList").replaceChildren(...picked.map((f, i) => el("span", { class: "chip" }, f.name + " (" + Math.max(1, Math.round(f.size / 1024)) + " KB)", el("button", { type: "button", "aria-label": "Remove " + f.name, onclick: () => { picked.splice(i, 1); renderFiles(); } }, "x"))));
+  const addFiles = (list) => { for (const f of list) { if (f.size > 45 * 1024 * 1024) { notice($("#formMsg"), "warn", f.name + " is over 45 MB, so it was skipped."); continue; } picked.push(f); } renderFiles(); };
+  drop.onclick = () => fin.click();
+  drop.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fin.click(); } };
+  fin.onchange = () => { addFiles(fin.files); fin.value = ""; };
+  ["dragenter", "dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", e => addFiles(e.dataTransfer.files));
+  async function uploadFiles(jobId) {
+    const ok = [], failed = [];
+    for (const f of picked) {
+      try {
+        const u = await api("upload_url", { job_id: jobId, name: f.name });
+        const r = await fetch(u.signedUrl, { method: "PUT", headers: { "Content-Type": f.type || "application/octet-stream", "x-upsert": "true" }, body: f });
+        if (!r.ok) throw new Error("upload"); ok.push(f.name);
+      } catch (_) { failed.push(f.name); }
+    }
+    if (ok.length) { try { await api("files_done", { job_id: jobId, names: ok }); } catch (_) {} }
+    return { ok, failed };
+  }
+  const DRAFT = ["f-name","f-industry","f-town","f-site","f-socials","f-audit","f-contact","f-phone","f-colour","f-meet","f-vibe","f-not","f-voice","f-note","f-extra","f-offer-custom","s-link","s-batch","s-notes"];
+  try { const dft = JSON.parse(store.get("lw-site-draft") || "{}"); DRAFT.forEach(id => { if (dft[id]) $("#" + id).value = dft[id]; }); } catch (_) {}
+  $("#intake").addEventListener("input", () => { const dft = {}; DRAFT.forEach(id => dft[id] = $("#" + id).value); store.set("lw-site-draft", JSON.stringify(dft)); });
+  let dupOk = "";
+  $("#intake").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = $("#formMsg"); msg.hidden = true;
+    const tr = track(), model = document.querySelector('input[name="model"]:checked').value, btn = $("#submitBtn");
+    btn.disabled = true;
+    try {
+      if (mode === "sheet") {
+        const cols = [["green", "#s-green"], ["blue", "#s-blue"], ["amber", "#s-amber"]].filter(([, s]) => $(s).checked).map(([c]) => c);
+        btn.textContent = "Saving...";
+        const r = await api("create_batch", { link: $("#s-link").value.trim(), batch: $("#s-batch").value.trim(), track: tr, builder_model: model, film: $("#s-film").checked, colours: cols, notes: $("#s-notes").value });
+        notice(msg, "ok", r.batch + " is in the queue. Claude reads it at its next hourly check, skips clients already in the Studio and emails Jess the list.");
+        ["s-link", "s-batch", "s-notes"].forEach(i => $("#" + i).value = "");
+      } else {
+        const name = $("#f-name").value.trim();
+        if (!name) { notice(msg, "err", "Add the business name."); $("#f-name").focus(); return; }
+        const offer = tr === "studio" ? document.querySelector('input[name="offer"]:checked').value : "stoep_7000";
+        if (offer === "custom" && !$("#f-offer-custom").value.trim()) { notice(msg, "err", "Type the custom price, or pick another option."); $("#f-offer-custom").focus(); return; }
+        if (dupOk !== name.toLowerCase()) {
+          btn.textContent = "Checking...";
+          const dup = await api("find_existing", { name, phone: $("#f-phone").value, site: $("#f-site").value });
+          if (dup.matches && dup.matches.length) { dupOk = name.toLowerCase(); notice(msg, "warn", "Already in the Studio: " + dup.matches.map(m => m.business_name + " (same " + m.matched_on + (m.status === "cancelled" ? ", removed" : "") + ")").join("; ") + ". Find it under Clients, or press Start again to build a second one anyway."); return; }
+        }
+        dupOk = "";
+        btn.textContent = "Saving...";
+        const fields = {
+          business_name: name, industry: $("#f-industry").value, town: $("#f-town").value, current_site: $("#f-site").value.trim(),
+          socials: $("#f-socials").value.split(/\s*\n\s*/).map(s => s.trim()).filter(Boolean), audit_link: $("#f-audit").value.trim(),
+          vibe_words: $("#f-vibe").value, not_vibe: $("#f-not").value, voice_notes: $("#f-voice").value,
+          design_refs: $$("#refs .ref").map(r => ({ url: r.children[0].value.trim(), why: r.children[1].value.trim() })).filter(r => r.url),
+          offer, offer_custom: $("#f-offer-custom").value, founder_note: $("#f-note").value, extra_notes: $("#f-extra").value,
+          track: tr, builder_model: model, contact_name: $("#f-contact").value, contact_phone: $("#f-phone").value, lead_colour: $("#f-colour").value,
+          meeting_at: fromLocalInput($("#f-meet").value), want_film: $("#f-film").checked
+        };
+        const r = await api("create_job", { fields });
+        let fileNote = "";
+        if (picked.length) { btn.textContent = "Uploading files..."; const u = await uploadFiles(r.id); fileNote = " " + u.ok.length + " file(s) uploaded." + (u.failed.length ? " These didn't upload: " + u.failed.join(", ") + "." : ""); }
+        notice(msg, "ok", name + " is in. " + QUEUED + fileNote);
+        DRAFT.filter(i => i.startsWith("f-")).forEach(i => $("#" + i).value = "");
+        $("#f-film").checked = false; $("#refs").replaceChildren(); addRef(); addRef(); picked = []; renderFiles(); $("#f-offer-custom").hidden = true;
+      }
+      store.set("lw-site-draft", "{}");
+      load(true);
+    } catch (err) { notice(msg, "err", "Not saved. " + errText(err)); }
+    finally { btn.disabled = false; syncForm(); }
+  });
+
+  /* ---------- boot ---------- */
+  $("#general").append(feedbackBox(null, "Your feedback"));
+  syncForm();
+  if (!code) showGate();
+  else load().then(ok => { if (ok) startApp(); });
+  setInterval(() => { if (!document.hidden && loaded && !openId) load(true); }, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && loaded) load(true); });
 })();
 </script>
+
 </body>
 </html>
