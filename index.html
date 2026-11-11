@@ -624,6 +624,15 @@ ul.sheet li{margin:3px 0}
   const groupOf = (j) => { const s = j.client_stage || "not_sent"; if (s === "won" || s === "lost") return s; if (!built(j)) return "not_sent"; return s === "not_sent" ? "with_laine" : s; };
   const presentationOf = (j) => safeUrl(j.client_link) || safeUrl(j.track === "stoep" ? j.breakdown_url : j.proposal_url);
 
+  /* when the next scheduled engine check runs: :23 past each hour, 07:23 to 20:23 SA time */
+  function nextCheck() {
+    const now = new Date(), sa = new Date(now.getTime() + 2 * 3600000);
+    let hr = sa.getUTCHours(), mn = sa.getUTCMinutes();
+    let h2 = mn < 23 ? hr : hr + 1, tomorrow = false;
+    if (h2 < 7) h2 = 7; else if (h2 > 20) { h2 = 7; tomorrow = true; }
+    return (tomorrow ? "tomorrow " : "") + String(h2).padStart(2, "0") + ":23";
+  }
+  const waitText = (j) => LOCKED.has(j.status) ? "Claude is on it" : "Starts at the next check, by " + nextCheck();
   /* ---------- formatting ---------- */
   const fmt = (iso, opts) => { if (!iso) return ""; try { return new Date(iso).toLocaleString("en-ZA", Object.assign({ timeZone: TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }, opts || {})); } catch (_) { return ""; } };
   const fmtMeet = (iso) => fmt(iso, { weekday: "short" });
@@ -937,7 +946,7 @@ ul.sheet li{margin:3px 0}
       : [el("p", { class: "empty", text: "No meetings or follow-ups in the next two weeks. Add one under Details on a client." })]));
     const work = jobs.filter(j => WORKING.has(j.status));
     $("#t-work").replaceChildren(...(work.length ? work.map(j => el("div", { class: "row" },
-      el("div", { class: "who" }, el("div", { class: "job-title" }, el("button", { type: "button", class: "name", onclick: () => openDrawer(j.id) }, j.business_name), el("span", { class: "meta", text: (j.stage_note || "Waiting its turn") + "  |  " + ago(j.updated_at) }))),
+      el("div", { class: "who" }, el("div", { class: "job-title" }, el("button", { type: "button", class: "name", onclick: () => openDrawer(j.id) }, j.business_name), el("span", { class: "meta", text: (j.stage_note || waitText(j)) + "  |  " + ago(j.updated_at) }))),
       chipsOf(j), el("div", { class: "side" }))) : [el("p", { class: "empty", text: "Nothing cooking right now." })]));
   }
 
